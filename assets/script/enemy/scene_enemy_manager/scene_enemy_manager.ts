@@ -7,26 +7,48 @@ const { ccclass, property } = _decorator;
 export class scene_enemy_manager extends Component {
     private is_paused: boolean = true; // 游戏是否暂停
     private timer_for_spawn: Timer = null; // 管理游戏全局生成敌人的计时器
+    
     //普通飞行敌人的生成时间点和位置偏移设置
-    private time_for_spqwn_sets: number[];
-    private pos_offset_sets: number[] ;
+    @property({ type: [Number], tooltip: "普通敌人生成时间点(秒)" })
+    private time_for_spqwn_sets: number[] = [10, 23, 23];
+    
+    @property({ type: [Number], tooltip: "普通敌人Y轴偏移" })
+    private pos_offset_sets: number[] = [0, 50, -180];
+    
     private spawn_index: number = 0; // 当前生成敌人的时间点索引
-    //电锯敌人的生成时间点和位置偏移设置
-    private time_for_spawn_circle_saw_sets: number[];
+    
+    //电锯敌人的生成时间点设置
+    @property({ type: [Number], tooltip: "电锯敌人生成时间点(秒)" })
+    private time_for_spawn_circle_saw_sets: number[] = [5, 10, 27];
+    
     private spawn_circle_saw_index: number = 0; // 当前生成电锯敌人的时间点索引
-    //激光敌人的生成时间点设置
-    private time_for_spawn_laser_sets: number[];
+    
+    //激光敌人的生成时间点和位置偏移设置
+    @property({ type: [Number], tooltip: "激光敌人生成时间点(秒)" })
+    private time_for_spawn_laser_sets: number[] = [7, 15, 29, 29];
+    
+    @property({ type: [Number], tooltip: "激光敌人Y轴偏移" })
+    private spawn_laser_pos_offset_sets: number[] = [0, 0, 60, 120];
+    
     private spawn_laser_index: number = 0; // 当前生成激光敌人的时间点索引
-    private spawn_laser_pos_offset_sets: number[]; // 激光敌人位置偏移设置
+    
     //警示区域生成设置
-    private time_for_spawn_warning_zone_sets: number[];
-    private spawn_warning_zone_index: number = 0
-    private spawn_warning_zone_pos_offset_sets: number[]; // 警示区域位置偏移设置
-    //跟踪导弹敌人的生成时间点设置
-    private time_for_spawn_tracking_missle_sets: number[];
+    @property({ type: [Number], tooltip: "警示区域生成时间点(秒)" })
+    private time_for_spawn_warning_zone_sets: number[] = [6, 14, 28, 28];
+    
+    @property({ type: [Number], tooltip: "警示区域Y轴偏移" })
+    private spawn_warning_zone_pos_offset_sets: number[] = [0, 0, 60, 120];
+    
+    private spawn_warning_zone_index: number = 0;
+    
+    //跟踪导弹敌人的生成时间点和位置偏移设置
+    @property({ type: [Number], tooltip: "跟踪导弹生成时间点(秒)" })
+    private time_for_spawn_tracking_missle_sets: number[] = [8, 9, 15, 16, 17, 18, 19, 27, 27, 27, 27];
+    
+    @property({ type: [Number], tooltip: "跟踪导弹Y轴偏移" })
+    private spawn_tracking_missle_pos_offset_sets: number[] = [150, -150, 50, 20, -10, -30, -50, 80, 20, -20, -80];
+    
     private spawn_tracking_missle_index: number = 0; // 当前生成跟踪导弹敌人的时间点索引
-    private spawn_tracking_missle_pos_offset_sets: number[]; // 跟踪导弹敌人位置偏移设置
-
 
     //敌人预制体
     @property({type: Prefab})
@@ -44,28 +66,11 @@ export class scene_enemy_manager extends Component {
     protected onLoad(): void {
         this.timer_for_spawn = this.addComponent(Timer);
         this.timer_for_spawn.set_duration(60); // 生成敌人的总时间为60秒
-        this.time_for_spqwn_sets = [10,23 ,23]; // 普通敌人的生成时间点
-        this.pos_offset_sets =     [0 ,50,-180]; // 每个生成时间点对应的敌人位置偏移
-
-        this.time_for_spawn_circle_saw_sets = [5, 10, 27]; // 电锯敌人的生成时间点
-
-        //激光敌人的生成时间点和位置偏移设置
-        this.time_for_spawn_laser_sets =   [7, 15, 29 , 29 ,];
-        this.spawn_laser_pos_offset_sets = [0, 0 , 60 , 120,];
-
-        //警示区域生成设置
-        this.time_for_spawn_warning_zone_sets =   [6,14,28,28 , ];
-        this.spawn_warning_zone_pos_offset_sets = [0, 0,60,120,  ];
-
-        //跟踪导弹敌人的生成时间点和位置偏移设置
-        this.time_for_spawn_tracking_missle_sets = [   8 ,  9  ,15,16, 17,18 , 19, 27, 27 , 27,  27 ];
-        this.spawn_tracking_missle_pos_offset_sets = [150, -150,50,20,-10,-30,-50, 80, 20 ,-20, -80];
     }
 
     // 组件启动：开始计时
     start() {
         this.timer_for_spawn.start();
-        
     }
 
     // 帧更新：按时间表投放敌人
@@ -95,7 +100,6 @@ export class scene_enemy_manager extends Component {
         this.node.parent.addChild(new_enemy_node);
     }
 
-
     //投放电锯敌人
     private spawn_circle_saw() {
         if(this.spawn_circle_saw_index >= this.time_for_spawn_circle_saw_sets.length) return;
@@ -110,6 +114,7 @@ export class scene_enemy_manager extends Component {
         const new_enemy_node = instantiate(this.circle_saw_prefab);
         this.node.parent.addChild(new_enemy_node);
     }
+    
     //投放激光敌人
     private spawn_laser() {
         if(this.spawn_laser_index >= this.time_for_spawn_laser_sets.length) return;
@@ -163,16 +168,6 @@ export class scene_enemy_manager extends Component {
         this.node.parent.addChild(new_enemy_node);
     }
 
-
-    
-    
-
-    
-
-    
-
-    
-
     // 暂停生成
     public Pause(){
         if(this.is_paused) return;
@@ -186,7 +181,4 @@ export class scene_enemy_manager extends Component {
         this.is_paused = false;
         this.timer_for_spawn.reStart();
     }
-
 }
-
-

@@ -2013,6 +2013,71 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "time_for_spqwn_sets": [
+      10,
+      23,
+      23
+    ],
+    "pos_offset_sets": [
+      0,
+      50,
+      -250
+    ],
+    "time_for_spawn_circle_saw_sets": [
+      5,
+      10,
+      27
+    ],
+    "time_for_spawn_laser_sets": [
+      7,
+      15,
+      29,
+      29
+    ],
+    "spawn_laser_pos_offset_sets": [
+      0,
+      0,
+      60,
+      120
+    ],
+    "time_for_spawn_warning_zone_sets": [
+      6,
+      14,
+      28,
+      28
+    ],
+    "spawn_warning_zone_pos_offset_sets": [
+      0,
+      0,
+      60,
+      120
+    ],
+    "time_for_spawn_tracking_missle_sets": [
+      8,
+      9,
+      15,
+      16,
+      17,
+      18,
+      19,
+      27,
+      27,
+      27,
+      27
+    ],
+    "spawn_tracking_missle_pos_offset_sets": [
+      150,
+      -150,
+      50,
+      20,
+      -10,
+      -30,
+      -50,
+      80,
+      20,
+      -20,
+      -80
+    ],
     "normal_one_prefab": {
       "__uuid__": "774f2cb2-e236-46db-862b-d85c1c384a00",
       "__expectedType__": "cc.Prefab"
