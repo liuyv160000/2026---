@@ -44,22 +44,22 @@ export class scene_enemy_manager extends Component {
     protected onLoad(): void {
         this.timer_for_spawn = this.addComponent(Timer);
         this.timer_for_spawn.set_duration(60); // 生成敌人的总时间为60秒
-        this.time_for_spqwn_sets = [7, 15, 20, 30 ,38]; // 普通敌人的生成时间点
-        this.pos_offset_sets = [0, 0, -40, 40, -40]; // 每个生成时间点对应的敌人位置偏移
+        this.time_for_spqwn_sets = [10,23 ,23]; // 普通敌人的生成时间点
+        this.pos_offset_sets =     [0 ,50,-180]; // 每个生成时间点对应的敌人位置偏移
 
-        this.time_for_spawn_circle_saw_sets = [5,7, 15 , 25 , 40]; // 电锯敌人的生成时间点
+        this.time_for_spawn_circle_saw_sets = [5, 10, 27]; // 电锯敌人的生成时间点
 
         //激光敌人的生成时间点和位置偏移设置
-        this.time_for_spawn_laser_sets =   [7, 15  , 22, 30 , 32, 39 , 39 ,41 , 42 ];
-        this.spawn_laser_pos_offset_sets = [0, 0 ,  50, -50, 50, 50 ,100 , 50, 100 ];
+        this.time_for_spawn_laser_sets =   [7, 15, 29 , 29 ,];
+        this.spawn_laser_pos_offset_sets = [0, 0 , 60 , 120,];
 
         //警示区域生成设置
-        this.time_for_spawn_warning_zone_sets = [6, 14,  21, 29, 31, 38 , 38 ,40 , 41 ];
-        this.spawn_warning_zone_pos_offset_sets = [0, 0 ,  50, -50, 50, 50 ,100 , 50, 100 ];
+        this.time_for_spawn_warning_zone_sets =   [6,14,28,28 , ];
+        this.spawn_warning_zone_pos_offset_sets = [0, 0,60,120,  ];
 
         //跟踪导弹敌人的生成时间点和位置偏移设置
-        this.time_for_spawn_tracking_missle_sets = [  10 , 10  , 16 + 2, 17 + 2,18 + 2,19 + 2,20 + 2, 22 + 2, 22 + 2 , 22 + 2 , 22 + 2, 25, 25 , 25 , 40];
-        this.spawn_tracking_missle_pos_offset_sets = [150, -150, 50,-50,40,60,80,200, 150, 100, 50, 0 ,-200, -50, 9];
+        this.time_for_spawn_tracking_missle_sets = [   8 ,  9  ,15,16, 17,18 , 19, 27, 27 , 27,  27 ];
+        this.spawn_tracking_missle_pos_offset_sets = [150, -150,50,20,-10,-30,-50, 80, 20 ,-20, -80];
     }
 
     // 组件启动：开始计时

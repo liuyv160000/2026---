@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.SceneAsset",
-    "_name": "ex_scene",
+    "_name": "test_ex_scene",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -11,7 +11,7 @@
   },
   {
     "__type__": "cc.Scene",
-    "_name": "ex_scene",
+    "_name": "test_ex_scene",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -59,7 +59,7 @@
     "_globals": {
       "__id__": 81
     },
-    "_id": "597e8b9f-7c82-42d1-bd62-f8926237cc1c"
+    "_id": "8c7d492c-1adb-43a8-b489-77b1a0c0fbfe"
   },
   {
     "__type__": "cc.Node",
