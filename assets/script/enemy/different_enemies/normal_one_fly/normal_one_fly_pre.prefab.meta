@@ -1,0 +1,14 @@
+{
+  "ver": "1.1.50",
+  "importer": "prefab",
+  "imported": true,
+  "uuid": "774f2cb2-e236-46db-862b-d85c1c384a00",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {},
+  "userData": {
+    "syncNodeName": "normal_one_fly_pre",
+    "persistent": false
+  }
+}

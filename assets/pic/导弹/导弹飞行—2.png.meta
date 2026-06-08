@@ -1,0 +1,134 @@
+{
+  "ver": "1.0.27",
+  "importer": "image",
+  "imported": true,
+  "uuid": "d6a0e172-e2d7-4836-b273-b6858ed2ba79",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "d6a0e172-e2d7-4836-b273-b6858ed2ba79@6c48a",
+      "displayName": "导弹飞行—2",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "imageUuidOrDatabaseUri": "d6a0e172-e2d7-4836-b273-b6858ed2ba79",
+        "isUuid": true,
+        "visible": false,
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "d6a0e172-e2d7-4836-b273-b6858ed2ba79@f9941",
+      "displayName": "导弹飞行—2",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 7.5,
+        "offsetY": -5.5,
+        "trimX": 28,
+        "trimY": 14,
+        "width": 274,
+        "height": 83,
+        "rawWidth": 315,
+        "rawHeight": 100,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -137,
+            -41.5,
+            0,
+            137,
+            -41.5,
+            0,
+            -137,
+            41.5,
+            0,
+            137,
+            41.5,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            28,
+            86,
+            302,
+            86,
+            28,
+            3,
+            302,
+            3
+          ],
+          "nuv": [
+            0.08888888888888889,
+            0.03,
+            0.9587301587301588,
+            0.03,
+            0.08888888888888889,
+            0.86,
+            0.9587301587301588,
+            0.86
+          ],
+          "minPos": [
+            -137,
+            -41.5,
+            0
+          ],
+          "maxPos": [
+            137,
+            41.5,
+            0
+          ]
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "d6a0e172-e2d7-4836-b273-b6858ed2ba79@6c48a",
+        "atlasUuid": "",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "fixAlphaTransparencyArtifacts": false,
+    "hasAlpha": true,
+    "redirect": "d6a0e172-e2d7-4836-b273-b6858ed2ba79@6c48a"
+  }
+}

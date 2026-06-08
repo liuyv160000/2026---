@@ -1,0 +1,21 @@
+{
+  "__version__": "1.0.6",
+  "physics": {
+    "fixedTimeStep": 0.0166667
+  },
+  "custom_joint_texture_layouts": [],
+  "layer": [
+    {
+      "name": "palyer",
+      "value": 128
+    },
+    {
+      "name": "background",
+      "value": 256
+    },
+    {
+      "name": "b2",
+      "value": 64
+    }
+  ]
+}
