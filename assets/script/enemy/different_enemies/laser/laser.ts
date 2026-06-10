@@ -77,7 +77,15 @@ export class laser extends enemy_controler_base {
 
     // 组件启动：开始计时
     start() {
+        if(this.if_damage_changed){
+            this.damage = this.changed_damage;
+        }
+        if(this.if_atk_time_changed){
+            this.atk_time = this.changed_atk_time;
+            this.onLoad(); // 重新加载以应用攻击时间改变
+        }
         this.life_timer.start();
+        
         this.anim.play('laser_gun');
     }
 
@@ -101,6 +109,20 @@ export class laser extends enemy_controler_base {
         if(!this.is_paused) return;
         this.is_paused = false;
     }
+
+    private if_atk_time_changed: boolean = false; // 攻击时间是否已改变过
+    private changed_atk_time: number = 0; // 已改变的攻击时间值
+    public set_atk_time(atk_time: number) {
+        this.changed_atk_time = atk_time;
+        this.if_atk_time_changed = true;
+     }
+
+    private if_damage_changed: boolean = false; // 伤害是否已改变过
+    private changed_damage: number = 0; // 已改变的伤害值
+    public set_damage(damage: number) {
+        this.changed_damage = damage;
+        this.if_damage_changed = true;
+     }
 
 }
 

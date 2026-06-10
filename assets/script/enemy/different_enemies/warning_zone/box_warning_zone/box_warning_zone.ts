@@ -21,7 +21,11 @@ export class box_warning_zone extends Component {
 
     // 组件启动
     start() {
-
+        if(this.if_warning_duration_changed){
+            this.warning_duration = this.changed_warning_duration;
+            this.initial_warning_duration = this.changed_warning_duration;
+            this.onLoad(); // 重新加载以应用警告持续时间改变
+        }
     }
 
     // 帧更新：按时间渐隐并销毁
@@ -40,6 +44,14 @@ export class box_warning_zone extends Component {
             }, 0.1);
         }
     }
+
+    private if_warning_duration_changed: boolean = false; // 警告持续时间是否已改变过
+    private changed_warning_duration: number = 0; // 已改变的警告持续时间值
+    public set_warning_duration(warning_duration: number) {
+        this.changed_warning_duration = warning_duration;
+        this.if_warning_duration_changed = true;
+     }
+
 }
 
 

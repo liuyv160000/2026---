@@ -125,7 +125,17 @@ export class tracking_missle extends enemy_controler_base {
      // 组件启动：恢复计时器
      start() {
           this.collider.enabled = false; // 初始禁用碰撞体，进入状态结束后启用
-          
+          if(this.if_speed_changed){
+               this.move_speed = this.changed_speed;
+          }
+          if(this.if_damage_changed){
+               this.damage = this.changed_damage;
+               this.onLoad(); // 重新加载以应用伤害改变
+          }
+          if(this.if_max_speed_changed){
+               this.atk_max_speed = this.changed_max_speed;
+          }
+
           this.Resume();
     }
 
@@ -229,6 +239,30 @@ export class tracking_missle extends enemy_controler_base {
         this.state_timer.reStart();
         this.protected_timer.reStart();
     }
+
+
+     private if_speed_changed: boolean = false; // 速度是否已改变过
+     private changed_speed: number = 0; // 已改变的速度值
+     public set_speed(speed: number) {
+        this.changed_speed = speed;
+        this.if_speed_changed = true;
+     }
+
+     private if_max_speed_changed: boolean = false; // 最大速度是否已改变过
+     private changed_max_speed: number = 0; // 已改变的最大速度值
+     public set_max_speed(max_speed: number) {
+        this.changed_max_speed = max_speed;
+        this.if_max_speed_changed = true;
+     }
+
+     private if_damage_changed: boolean = false; // 伤害是否已改变过
+     private changed_damage: number = 0; // 已改变的伤害值
+     public set_damage(damage: number) {
+        this.changed_damage = damage;
+        this.if_damage_changed = true;
+     }
+
+
 }
 
 

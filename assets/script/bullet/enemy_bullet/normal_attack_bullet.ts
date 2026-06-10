@@ -65,6 +65,13 @@ export class normal_attack_bullet extends bullet_base {
     // 组件启动：启动生命周期计时
     start() {
         this.timer_for_life.start();
+        if(this.if_damage_changed){
+            this.damage = this.changed_damage;
+        }
+        if(this.if_speed_changed){
+            this.speed = this.changed_speed;
+            this.onLoad(); // 重新加载以应用速度改变
+        }
     }
 
 
@@ -72,6 +79,23 @@ export class normal_attack_bullet extends bullet_base {
     update(deltaTime: number) {
         super.update(deltaTime);
     }
+
+    private if_damage_changed: boolean = false; // 伤害是否已改变过
+     private changed_damage: number = 0; // 已改变的伤害值
+     public set_damage(damage: number) {
+        this.changed_damage = damage;
+        this.if_damage_changed = true;
+     }
+
+    private if_speed_changed: boolean = false; // 速度是否已改变过
+     private changed_speed: number = 0; // 已改变的速度值
+     public set_speed(speed: number) {
+        this.changed_speed = speed;
+        this.if_speed_changed = true;
+     }
+
+     
+
 
 
 

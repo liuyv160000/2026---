@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.SceneAsset",
-    "_name": "ex_scene",
+    "_name": "ex_scene_1",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -59,7 +59,7 @@
     "_globals": {
       "__id__": 87
     },
-    "_id": "597e8b9f-7c82-42d1-bd62-f8926237cc1c"
+    "_id": "f11d3b14-b25c-4d3e-8bb6-6e2a1e4cf776"
   },
   {
     "__type__": "cc.Node",
@@ -1515,7 +1515,7 @@
     "_string": "",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 55.95703125,
+    "_actualFontSize": 60.29296875,
     "_fontSize": 50,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
@@ -2032,10 +2032,6 @@
       1,
       1
     ],
-    "set_normal_fly_speed": 400,
-    "set_normal_fly_damage": 20,
-    "set_normal_fly_bullet_speed": 1600,
-    "set_normal_fly_bullet_damage": 10,
     "time_for_spawn_circle_saw_sets": [
       5,
       10,
@@ -2051,8 +2047,6 @@
       61,
       63
     ],
-    "set_circle_saw_speed": 1000,
-    "set_circle_saw_damage": 10,
     "time_for_spawn_laser_sets": [
       7,
       15,
@@ -2079,9 +2073,6 @@
       50,
       -50
     ],
-    "set_laser_damage": 30,
-    "set_laser_atk_time": 0.4,
-    "set_warning_count": 1,
     "time_for_spawn_tracking_missle_sets": [
       8,
       9,
@@ -2178,9 +2169,6 @@
       -130,
       10
     ],
-    "set_tracking_missle_speed": 900,
-    "set_tracking_missle_max_speed": 6400,
-    "set_tracking_missle_damage": 20,
     "normal_one_prefab": {
       "__uuid__": "774f2cb2-e236-46db-862b-d85c1c384a00",
       "__expectedType__": "cc.Prefab"
@@ -2420,7 +2408,7 @@
     "_string": "点击开始游戏",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 55.95703125,
+    "_actualFontSize": 60.29296875,
     "_fontSize": 50,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
@@ -2522,7 +2510,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 303.96231457242584,
+      "width": 303.98516966310336,
       "height": 67
     },
     "_anchorPoint": {

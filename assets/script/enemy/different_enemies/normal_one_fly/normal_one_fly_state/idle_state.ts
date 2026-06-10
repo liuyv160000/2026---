@@ -28,7 +28,7 @@ export class idle_state implements IState {
     // 进入待机状态
     enter(): void {
         this.enemy.anim.play("idle");
-        this.enemy.change_speed(400);
+        this.enemy.change_speed(this.enemy.get_speed());
         this.enemy.change_dir(new Vec2(0, this.enemy.get_patrol_dir()*-1));
         this.enemy.is_idle = true;
         this.enemy.is_onining = false;

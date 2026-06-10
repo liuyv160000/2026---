@@ -13,6 +13,7 @@ import { atk_state } from './normal_one_fly_state/atk_state';
 import { Timer } from '../../../Timer';
 import { Playercontralor } from '../../../player/Playercontralor';
 import { annoucer } from '../../../annoucement_system/annoucer';
+import { normal_attack_bullet } from '../../../bullet/enemy_bullet/normal_attack_bullet';
 const { ccclass, property } = _decorator;
 
 @ccclass('normal_one')
@@ -164,6 +165,7 @@ export class normal_one extends enemy_controler_base {
         this.timer_for_attack.start();
         this.protected_timer.start();
         this.collider.enabled = false; // 初始禁用碰撞体，进入状态结束时启用
+        
         this.fsm.changeState('on_in');
     }
 
@@ -187,10 +189,17 @@ export class normal_one extends enemy_controler_base {
             if(this.state_index == 0)
             {
                 this.fsm.changeState('idle');
+                if(this.if_speed_changed){
+                    this.move_speed = this.changed_speed;
+                }
+                
             }
             else if(this.state_index == 1)
             {
                 this.fsm.changeState('run_away');
+                if(this.if_damage_changed){
+                    this.damage = this.changed_damage;
+                }
             }
             
             this.state_index++;
@@ -232,6 +241,8 @@ export class normal_one extends enemy_controler_base {
             {
                 this.anim.play('atk');
                 let bullet = instantiate(this.prefeb_bullet);
+                bullet.getComponent(normal_attack_bullet).set_speed(this.bullet_speed);
+                bullet.getComponent(normal_attack_bullet).set_damage(this.bullet_damage);
                 bullet.setPosition(new Vec3(this.node.getPosition().x, bullet_post_pos_y,0));
                 this.node.parent.addChild(bullet);
                 this.timer_for_attack.reset();
@@ -285,7 +296,37 @@ export class normal_one extends enemy_controler_base {
         this.state_timer.reStart();
     }
 
+     public if_speed_changed: boolean = false; // 速度是否已改变过
+     public changed_speed: number = 0; // 已改变的速度值
+     public set_speed(speed: number) {
+        this.changed_speed = speed;
+        this.if_speed_changed = true;
+     }
 
+     public if_damage_changed: boolean = false; // 伤害是否已改变过
+     public changed_damage: number = 0; // 已改变的伤害值
+     public set_damage(damage: number) {
+        this.changed_damage = damage;
+        this.if_damage_changed = true;
+     }
+
+    public bullet_speed: number = 1400; // 子弹速度
+    public bullet_damage: number = 10; // 子弹伤害
+    public set_bullet_damage(damage: number) {
+        this.bullet_damage = damage;
+        this.if_damage_changed = true;
+    }
+
+    public set_bullet_speed(speed: number) {
+        this.bullet_speed = speed;
+        this.if_speed_changed = true;
+    }
+
+    public get_speed(): number {
+        return this.move_speed;
+    }
+
+    
 
 }
 

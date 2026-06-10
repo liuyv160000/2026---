@@ -73,10 +73,16 @@ export class circle_saw extends enemy_controler_base {
     start() {
         this.anim.play('spining'); // 播放旋转动画
         this.node.setPosition(this.position); // 设置圆锯的初始位置
+        if(this.if_speed_changed){
+            this.move_speed = this.changed_speed;
+        }
+        if(this.if_damage_changed){
+            this.damage = this.changed_damage;
+        }
     }
 
-        // 帧更新：移动与出界销毁
-        update(deltaTime: number) {
+    // 帧更新：移动与出界销毁
+    update(deltaTime: number) {
         if(this.is_paused)  return;
         super.update(deltaTime);
 
@@ -105,6 +111,20 @@ export class circle_saw extends enemy_controler_base {
     
     }
 
+
+    private if_speed_changed: boolean = false; // 速度是否已改变过
+    private changed_speed: number = 0; // 已改变的速度值
+    public set_speed(speed: number) {
+        this.changed_speed = speed;
+        this.if_speed_changed = true;
+    }
+
+    private if_damage_changed: boolean = false; // 伤害是否已改变过
+    private changed_damage: number = 0; // 已改变的伤害值
+    public set_damage(damage: number) {
+        this.changed_damage = damage;
+        this.if_damage_changed = true;
+    }
 
    
 
