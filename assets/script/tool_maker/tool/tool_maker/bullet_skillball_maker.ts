@@ -3,7 +3,7 @@ import { _decorator, Component, Node, Vec3, Prefab, instantiate,
     RigidBody2D, Collider2D } from 'cc';
 import { Timer } from '../../../Timer';
 import { background_annoucer } from '../../../annoucement_system/background_annoucer';
-
+import { bullet_skill_orb } from '../skill_orb/bullet_skill_orb';
 const { ccclass, property } = _decorator;
 
 @ccclass('skill_orb_maker')
@@ -20,6 +20,9 @@ export class skill_orb_maker extends Component {
 
     @property({ tooltip: "技能球对象池大小" })
     skill_orb_pool_size: number = 3;
+
+    @property({ tooltip: "设置技能球生成后的飞行速度" })
+    skill_orb_flight_speed: number = 500;
 
     private skill_orb_pool: Node[] = [];
     private spawn_position: Vec3 = new Vec3();
@@ -159,7 +162,7 @@ export class skill_orb_maker extends Component {
 
         skillOrb.setPosition(position);
         skillOrb.active = true;
-
+        skillOrb.getComponent(bullet_skill_orb)?.changeXSpeed(this.skill_orb_flight_speed);
         this.activatePhysicsDelayed(skillOrb);
         return skillOrb;
     }

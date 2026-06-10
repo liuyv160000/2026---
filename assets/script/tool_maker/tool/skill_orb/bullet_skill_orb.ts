@@ -40,6 +40,13 @@ export class bullet_skill_orb extends bullet_base {
         PhysicsSystem2D.instance.enable = true;
     }
 
+    start(){
+        if(this.if_xspeed_changed){
+            this.speed = this.changed_xspeed;
+            this.onLoad(); // 重新初始化以应用新的速度
+        }
+    }
+
     // 销毁时清理占位
     protected onDestroy(): void {
     }
@@ -61,5 +68,12 @@ export class bullet_skill_orb extends bullet_base {
     // 碰撞结束占位
     protected onEndContact(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
         // 占位
+    }
+
+    private if_xspeed_changed: boolean = false; // 水平速度是否已改变过
+    private changed_xspeed: number = 0; // 记录改变后的水平速度
+    public changeXSpeed(new_speed: number) {
+        this.changed_xspeed = new_speed;
+        this.if_xspeed_changed = true;
     }
 }
