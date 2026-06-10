@@ -28,6 +28,10 @@ export class tm_dead_state extends Component implements IState {
 
     // 状态更新：到时销毁
     update(deltaTime: number) {
+        this.state_timer -= deltaTime;
+        if (this.state_timer <= 0) {
+            this.tm.onDestroy();
+        }
     }
 
     // 退出死亡状态

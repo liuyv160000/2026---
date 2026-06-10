@@ -112,6 +112,7 @@ export class tracking_missle extends enemy_controler_base {
           this.Physics2DContact = contact;
            if (other.node.name === 'player') {
             other.node.getComponent(Playercontralor).get_hurted(this.damage);
+            this.collider.enabled = false; // 禁用碰撞体避免重复触发
             this.fsm.changeState("dead");
             this.is_dead = true;
             this.scheduleOnce(() => {

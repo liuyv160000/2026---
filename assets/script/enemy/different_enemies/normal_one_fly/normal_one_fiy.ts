@@ -36,6 +36,9 @@ export class normal_one extends enemy_controler_base {
     private state_timer: Timer = null!; // 状态切换计时器
     private state_times: number[] = [1,10]; // 各状态持续时间
     private state_index: number = 0; // 当前状态索引
+
+    @property(Number)
+    private patrol_dir: number = 1; // 巡逻方向（1或-1）
     
     private transform: UITransform = null!; // UI尺寸组件
 
@@ -79,6 +82,14 @@ export class normal_one extends enemy_controler_base {
 
         this.annoucer = this.node.parent.getChildByName('Camera')!.getChildByName("kill_annoucer")!.getComponent(annoucer)!;
         
+    }
+
+    public set_patrol_dir(dir: number) {
+        this.patrol_dir = dir;
+    }
+
+    public get_patrol_dir(): number {
+        return this.patrol_dir;
     }
 
     //初始化动画组件

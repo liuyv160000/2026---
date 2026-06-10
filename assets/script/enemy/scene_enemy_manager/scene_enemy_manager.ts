@@ -1,19 +1,26 @@
 // 场景敌人管理：按时间表投放各类敌人
 import { _decorator, Component, Node, instantiate, Vec2, Vec3, Prefab } from 'cc';
 import { Timer } from '../../Timer';
+import { normal_one } from '../different_enemies/normal_one_fly/normal_one_fiy';
+import { ex_manager } from '../../ex_ctrl/ex_manager';
 const { ccclass, property } = _decorator;
 
 @ccclass('scene_enemy_manager')
 export class scene_enemy_manager extends Component {
     private is_paused: boolean = true; // 游戏是否暂停
     private timer_for_spawn: Timer = null; // 管理游戏全局生成敌人的计时器
-    
+    @property(ex_manager)
+    private ex_manager: ex_manager = null;  // 外部关卡管理器引用，用于访问关卡时间等信息
+
     //普通飞行敌人的生成时间点和位置偏移设置
     @property({ type: [Number], tooltip: "普通敌人生成时间点(秒)" })
     private time_for_spqwn_sets: number[] = [10, 23, 23];
     
     @property({ type: [Number], tooltip: "普通敌人Y轴偏移" })
-    private pos_offset_sets: number[] = [0, 50, -180];
+    private pos_offset_sets: number[] = [0, 10, -10];
+
+    @property({ type: [Number], tooltip: "普通敌人巡逻方向" })
+    private patrol_dir_sets: number[] = [1, 1, -1];
     
     private spawn_index: number = 0; // 当前生成敌人的时间点索引
     
@@ -23,23 +30,15 @@ export class scene_enemy_manager extends Component {
     
     private spawn_circle_saw_index: number = 0; // 当前生成电锯敌人的时间点索引
     
-    //激光敌人的生成时间点和位置偏移设置
-    @property({ type: [Number], tooltip: "激光敌人生成时间点(秒)" })
+    //激光敌人的生成时间点和位置偏移设置（同时控制警戒区域）
+    @property({ type: [Number], tooltip: "激光敌人生成时间点(秒)（警戒区域提前1秒生成）" })
     private time_for_spawn_laser_sets: number[] = [7, 15, 29, 29];
     
-    @property({ type: [Number], tooltip: "激光敌人Y轴偏移" })
+    @property({ type: [Number], tooltip: "激光敌人Y轴偏移（警戒区域使用相同偏移）" })
     private spawn_laser_pos_offset_sets: number[] = [0, 0, 60, 120];
     
     private spawn_laser_index: number = 0; // 当前生成激光敌人的时间点索引
-    
-    //警示区域生成设置
-    @property({ type: [Number], tooltip: "警示区域生成时间点(秒)" })
-    private time_for_spawn_warning_zone_sets: number[] = [6, 14, 28, 28];
-    
-    @property({ type: [Number], tooltip: "警示区域Y轴偏移" })
-    private spawn_warning_zone_pos_offset_sets: number[] = [0, 0, 60, 120];
-    
-    private spawn_warning_zone_index: number = 0;
+    private spawn_warning_zone_index: number = 0; // 当前生成警戒区域的时间点索引
     
     //跟踪导弹敌人的生成时间点和位置偏移设置
     @property({ type: [Number], tooltip: "跟踪导弹生成时间点(秒)" })
@@ -65,7 +64,7 @@ export class scene_enemy_manager extends Component {
     // 初始化生成时间表与计时器
     protected onLoad(): void {
         this.timer_for_spawn = this.addComponent(Timer);
-        this.timer_for_spawn.set_duration(60); // 生成敌人的总时间为60秒
+        this.timer_for_spawn.set_duration(this.ex_manager.get_total_time()); // 生成敌人的总时间
     }
 
     // 组件启动：开始计时
@@ -85,7 +84,7 @@ export class scene_enemy_manager extends Component {
 
     //投放飞行敌人
     private spawn_enemies() {
-        if(this.spawn_index >= this.time_for_spqwn_sets.length) return; // 如果所有生成时间点都已处理，直接返回
+        if(this.spawn_index >= this.time_for_spqwn_sets.length) return;
         if(this.timer_for_spawn.get_elapsedTime() >= this.time_for_spqwn_sets[this.spawn_index]) {
             this.post_normal_one();
             this.spawn_index++;
@@ -97,6 +96,7 @@ export class scene_enemy_manager extends Component {
         const new_enemy_node = instantiate(this.normal_one_prefab);
         const post_postion = new Vec3(this.node.position.x, this.node.position.y + this.pos_offset_sets[this.spawn_index], this.node.position.z);      
         new_enemy_node.setPosition(post_postion);
+        new_enemy_node.getComponent(normal_one).set_patrol_dir(this.patrol_dir_sets[this.spawn_index]);
         this.node.parent.addChild(new_enemy_node);
     }
 
@@ -127,26 +127,36 @@ export class scene_enemy_manager extends Component {
     // 生成激光敌人
     private post_laser() {
         const new_enemy_node = instantiate(this.laser_prefab);
-        const length: number = 1573.488; // 警告区域长度，根据实际情况调整
-        const post_postion = new Vec3(this.node.position.x - 1150, this.node.position.y + this.spawn_laser_pos_offset_sets[this.spawn_laser_index], this.node.position.z);
+        const post_postion = new Vec3(
+            this.node.position.x - 1150, 
+            this.node.position.y + this.spawn_laser_pos_offset_sets[this.spawn_laser_index], 
+            this.node.position.z
+        );
         new_enemy_node.setPosition(post_postion);
         this.node.parent.addChild(new_enemy_node);
     }
 
-    //投放警告区域
+    //投放警告区域（使用激光的时间点提前1秒，位置偏移相同）
     private spawn_warning_zone() {
-        if(this.spawn_warning_zone_index >= this.time_for_spawn_warning_zone_sets.length) return;
-        if(this.timer_for_spawn.get_elapsedTime() >= this.time_for_spawn_warning_zone_sets[this.spawn_warning_zone_index]) {
+        if(this.spawn_warning_zone_index >= this.time_for_spawn_laser_sets.length) return;
+        
+        // 使用激光的时间点减去1秒作为警戒区域的生成时间
+        const warning_time = this.time_for_spawn_laser_sets[this.spawn_warning_zone_index] - 1;
+        
+        if(this.timer_for_spawn.get_elapsedTime() >= warning_time) {
             this.post_warning_zone();
             this.spawn_warning_zone_index++;
         }
     }
 
-    // 生成警告区域
+    // 生成警告区域（使用激光的位置偏移）
     private post_warning_zone() {
         const new_warning_zone_node = instantiate(this.box_warning_zone_prefab);
-        const length: number = 1573.488; // 警告区域长度，根据实际情况调整
-        const post_postion = new Vec3(this.node.position.x - 1150, this.node.position.y + this.spawn_warning_zone_pos_offset_sets[this.spawn_warning_zone_index], this.node.position.z);
+        const post_postion = new Vec3(
+            this.node.position.x - 1150, 
+            this.node.position.y + this.spawn_laser_pos_offset_sets[this.spawn_warning_zone_index], 
+            this.node.position.z
+        );
         new_warning_zone_node.setPosition(post_postion);
         this.node.parent.addChild(new_warning_zone_node);
     }
@@ -163,7 +173,11 @@ export class scene_enemy_manager extends Component {
     // 生成跟踪导弹敌人
     private post_tracking_missle() {
         const new_enemy_node = instantiate(this.tracking_missle_prefab);
-        const post_postion = new Vec3(this.node.position.x, this.node.position.y + this.spawn_tracking_missle_pos_offset_sets[this.spawn_tracking_missle_index], this.node.position.z);      
+        const post_postion = new Vec3(
+            this.node.position.x, 
+            this.node.position.y + this.spawn_tracking_missle_pos_offset_sets[this.spawn_tracking_missle_index], 
+            this.node.position.z
+        );      
         new_enemy_node.setPosition(post_postion);
         this.node.parent.addChild(new_enemy_node);
     }

@@ -14,13 +14,31 @@ import { music_play_ctrl } from '../music_manager/music_play_ctrl';
 import { scene_enemy_manager } from '../enemy/scene_enemy_manager/scene_enemy_manager';
 import { ex_move_ctrl } from './ex_move_ctrl';
 import { camera_contorler } from '../camera/camera_contorler';
+import { time_showe } from '../../script_for_text/time_showe';
 const { ccclass, property } = _decorator;
 
 @ccclass('ex_manager')
 export class ex_manager extends Component {
+    // 关卡配置参数
+    @property({ tooltip: "关卡总时间(秒)" })
+    private total_time: number = 60;
+
+    public get_total_time(): number {
+        return this.total_time;
+    }
+
+    @property(time_showe)
+    private start_tips: time_showe = null!; // 开始提示组件
+
+    @property({ tooltip: "胜利场景名称" })
+    private victor_scene_name: string = 'victor_scence';
+    
+    @property({ tooltip: "胜利后延迟切换场景时间(秒)" })
+    private victor_delay: number = 0.6;
+    
     private is_playing: boolean = false; // 游戏是否正在进行
     private timer: Timer = null; // 关卡计时器
-    private total_time: number = 0;    //关卡总时间
+    
     //子组件管理
     @property(Node)
     private player: Node = null; // 玩家节点
@@ -47,12 +65,10 @@ export class ex_manager extends Component {
         if(!this.timer){
             this.timer = this.node.addComponent(Timer);
         }
-        this.total_time = 60; //设置关卡总时间为60秒
         this.timer.set_duration(this.total_time);
-        
     }
 
-         /** 初始化输入系统 */
+    /** 初始化输入系统 */
     // 初始化输入监听
     private initInput(): void {
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
@@ -90,14 +106,14 @@ export class ex_manager extends Component {
             this.camera_ctrl.pause_follow(); // 暂停摄像机跟随
             this.scheduleOnce(() => {
             this.onLoad_victor_scene(); // 切换到胜利场景
-        }, 0.6);
+        }, this.victor_delay);
             
         }
     }
 
     // 切换到胜利场景
     onLoad_victor_scene() {
-        director.loadScene('victor_scence');
+        director.loadScene(this.victor_scene_name);
     }
 
     // 暂停所有子系统
@@ -109,6 +125,7 @@ export class ex_manager extends Component {
         this.scene_enemy_manager.Pause();
         this.timer.stop();
         this.move_ctrl.stop();
+        this.start_tips.pause();
     }
 
     // 启动关卡并恢复子系统
@@ -121,7 +138,7 @@ export class ex_manager extends Component {
         this.scene_enemy_manager.Resume();
         this.timer.reStart(); // 重新开始计时器
         this.move_ctrl.resume();
-        
+        this.start_tips.resume();
     }
 
 }
