@@ -218,7 +218,7 @@ export class Playercontralor extends Component {
     // 碰撞开始处理
     private onBeginContact(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
     this.Physics2DContact = contact;
-
+    
     // 例如：碰到地面
     if (other.node.getComponent('plat')) {
         if(this.ifReversing ) return; // 如果是反转状态，碰撞体是触发器，不执行落地逻辑
@@ -241,6 +241,7 @@ export class Playercontralor extends Component {
     // 碰撞结束处理
     private onEndContact(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
     if (other.node.name === 'platform') {
+        this.if_can_reverse = false; // 默认碰撞后不允许反转，除非满足特定条件
     }
 
   }

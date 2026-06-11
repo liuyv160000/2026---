@@ -130,7 +130,7 @@ export class supply_box extends enemy_controler_base {
         this.node.setPosition(newX, newY, currentPos.z);
         
         // 移出屏幕左边时销毁（可选，防止无限左移）
-        if (newX < -100) {
+        if (newX < -500) {
             this.node.destroy();
         }
     }

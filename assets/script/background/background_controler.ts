@@ -5,6 +5,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('background_controler')
 export class background_controler extends Component {
+    @property({type: Number, tooltip: "背景滚动速度，单位像素/秒" })
     public speed: number = 2400; // 背景滚动速度
     private childNodes: Node[] = []; // 缓存背景片段节点
     @property

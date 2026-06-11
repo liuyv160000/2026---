@@ -623,6 +623,7 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "speed": 1600,
     "move_idx": null,
     "loop_time": 0,
     "timer": null,
@@ -1515,7 +1516,7 @@
     "_string": "",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 55.95703125,
+    "_actualFontSize": 62.109375,
     "_fontSize": 50,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
@@ -1804,6 +1805,7 @@
       10
     ],
     "skill_orb_pool_size": 3,
+    "skill_orb_flight_speed": 500,
     "announcer": {
       "__id__": 42
     },
@@ -1904,6 +1906,7 @@
       20
     ],
     "skill_orb_pool_size": 3,
+    "skill_orb_flight_speed": 500,
     "announcer": null,
     "_id": "b9Lq8pyaJPj7sPkNUaNouX"
   },
@@ -2420,7 +2423,7 @@
     "_string": "点击开始游戏",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 55.95703125,
+    "_actualFontSize": 62.109375,
     "_fontSize": 50,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
@@ -2522,7 +2525,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 303.96231457242584,
+      "width": 303.9546481918239,
       "height": 67
     },
     "_anchorPoint": {
