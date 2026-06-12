@@ -11,6 +11,7 @@ import { background_controler } from '../background/background_controler';
 import { toolmaker } from '../tool_maker/toolmaker';
 import { normal_one } from '../enemy/different_enemies/normal_one_fly/normal_one_fiy';
 import { music_play_ctrl } from '../music_manager/music_play_ctrl';
+import { scene_enemy_manager_new } from '../enemy/scene_enemy_manager/scene_enemy_manager_new';
 import { scene_enemy_manager } from '../enemy/scene_enemy_manager/scene_enemy_manager';
 import { ex_move_ctrl } from './ex_move_ctrl';
 import { camera_contorler } from '../camera/camera_contorler';
@@ -46,8 +47,14 @@ export class ex_manager extends Component {
     private background: background_controler = null; // 背景控制
     @property(Node)
     private collection_poster: Node = null; // 道具生成控制
+
+    @property(scene_enemy_manager_new)
+    private scene_enemy_manager_new: scene_enemy_manager_new = null; // 新的敌人生成控制
     @property(scene_enemy_manager)
-    private scene_enemy_manager: scene_enemy_manager = null; // 敌人生成控制
+    private scene_enemy_manager: scene_enemy_manager = null; // 旧的敌人生成控制
+    @property(Boolean)
+    private use_new_enemy_manager: boolean = false; // 是否使用新的敌人生成控制
+    
     @property(music_play_ctrl)
     private musicPlayer: music_play_ctrl = null; // 音乐控制
     @property(Label)
@@ -122,7 +129,11 @@ export class ex_manager extends Component {
         this.background.Pause();
         this.collection_poster.active = false; // 禁用道具生成
         this.musicPlayer.pause_music();
-        this.scene_enemy_manager.Pause();
+        if (this.use_new_enemy_manager) {
+            this.scene_enemy_manager_new.Pause();
+        } else {
+            this.scene_enemy_manager.Pause();
+        }
         this.timer.stop();
         this.move_ctrl.stop();
         this.start_tips.pause();
@@ -135,7 +146,11 @@ export class ex_manager extends Component {
         this.background.Resume();
         this.collection_poster.active = true; // 启用道具生成
         this.musicPlayer.resume_music(); // 恢复音乐
-        this.scene_enemy_manager.Resume();
+        if (this.use_new_enemy_manager) {
+            this.scene_enemy_manager_new.Resume();
+        } else {
+            this.scene_enemy_manager.Resume();
+        }
         this.timer.reStart(); // 重新开始计时器
         this.move_ctrl.resume();
         this.start_tips.resume();

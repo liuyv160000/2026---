@@ -154,7 +154,7 @@
       "__id__": 7
     },
     "enabledContactListener": true,
-    "bullet": true,
+    "bullet": false,
     "awakeOnLoad": true,
     "_group": 1,
     "_type": 1,
@@ -219,6 +219,7 @@
     },
     "speed": 0,
     "target": null,
+    "angle_offset": 0,
     "_id": ""
   },
   {

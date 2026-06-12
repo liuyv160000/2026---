@@ -178,9 +178,11 @@ export class tracking_missle extends enemy_controler_base {
 
     die_check()
     {
+        if(this.is_dead) return;
         super.die_check();
         if(this.enemy_hp <= 0)
         {
+            
             this.annoucer.get_killed_event();
             this.collider.enabled = false;
             this.fsm.changeState('dead');

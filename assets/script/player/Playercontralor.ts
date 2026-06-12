@@ -32,6 +32,8 @@ import { Deadstate } from './states/Deadstate';
 import {hp_line} from './hp_line/hp_line_shower/hp_line';
 import { Timer } from '../Timer';
 import { SkillSystem } from './skill_system/SkillSystem';
+import { bullet_base } from '../bullet/bullet_base';
+import { dao_ctrl } from './skill_system/dao/dao_ctrl';
 
 
 const { ccclass, property } = _decorator;
@@ -55,6 +57,8 @@ export class Playercontralor extends Component {
     public invincibleDuration:number = 1; //无敌状态持续时间（秒）
     public invincibleTimer: Timer = null; //无敌状态计时器
     public anim: Animation = null; //角色动画组件
+    @property({type: Boolean})
+    public on_line:boolean = false; //角色是否在地面边缘
 
     @property(BoxCollider2D)
     node_to_ignore: BoxCollider2D | null = null; // 反转时需要忽略碰撞的节点，例如平台
@@ -222,16 +226,27 @@ export class Playercontralor extends Component {
     // 例如：碰到地面
     if (other.node.getComponent('plat')) {
         if(this.ifReversing ) return; // 如果是反转状态，碰撞体是触发器，不执行落地逻辑
-        if(other.node.name === 'plat_line')
+        if(other.node.name === 'plat_line' )
         {
             this.if_can_reverse = true; 
+            this.on_line = true; // 站在线平台
             this.Land();
         }// 站在线平台上时允许反转
         else
         {
             this.if_can_reverse = false; 
+            this.on_line = false; // 不站在线平台
         }
         
+    }
+    else if(other.node.getComponent(bullet_base) || other.node.parent?.getComponent(dao_ctrl))
+    {
+        this.on_line = this.on_line; // 碰到子弹时保持当前在线状态不变
+        this.if_can_reverse = this.if_can_reverse; // 碰到子弹时保持当前反转能力状态不变
+    }
+    else
+    {
+        this.on_line = false; // 碰到非平台物体，视为不在线
     }
 
     // 如果需要接触点信息（引擎支持时）
@@ -240,9 +255,6 @@ export class Playercontralor extends Component {
 
     // 碰撞结束处理
     private onEndContact(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
-    if (other.node.name === 'platform') {
-        this.if_can_reverse = false; // 默认碰撞后不允许反转，除非满足特定条件
-    }
 
   }
 
@@ -391,7 +403,7 @@ export class Playercontralor extends Component {
     // 触发反转状态
     public Reverse()
     {
-        if(!this.ifGround || !this.if_can_reverse || this.ifAir) return;
+        if(!this.on_line || !this.ifGround || !this.if_can_reverse || this.ifAir) return;
         this.ifReversing = true;
         this.fsm.changeState('reversing');
            

@@ -624,6 +624,7 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "speed": 1600,
     "move_idx": null,
     "loop_time": 0,
     "timer": null,
@@ -1018,6 +1019,7 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "on_line": false,
     "node_to_ignore": null,
     "hp_line": {
       "__id__": 22
@@ -1516,7 +1518,7 @@
     "_string": "",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 62.05078125,
+    "_actualFontSize": 62.109375,
     "_fontSize": 50,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
@@ -1798,9 +1800,7 @@
       "__uuid__": "3e0bb25c-337f-45a3-976f-2c34e7af03e0",
       "__expectedType__": "cc.Prefab"
     },
-    "skill_orb_spawn_times": [
-      1
-    ],
+    "skill_orb_spawn_times": [],
     "skill_orb_y_offsets": [
       10
     ],
@@ -1825,9 +1825,7 @@
       "__uuid__": "cabfe951-dbca-444c-a01b-3577b68043e2",
       "__expectedType__": "cc.Prefab"
     },
-    "time_for_post_supply": [
-      1
-    ],
+    "time_for_post_supply": [],
     "supply_y_offsets": [
       50
     ],
@@ -1848,14 +1846,10 @@
       "__expectedType__": "cc.Prefab"
     },
     "time_for_post_supply": [
-      20,
-      25,
-      55
+      0
     ],
     "supply_y_offsets": [
-      40,
-      -40,
-      100
+      0
     ],
     "_id": "91s/5IFw5FmoyVEwpKlPtz"
   },
@@ -1899,9 +1893,7 @@
       "__uuid__": "3e0bb25c-337f-45a3-976f-2c34e7af03e0",
       "__expectedType__": "cc.Prefab"
     },
-    "skill_orb_spawn_times": [
-      5
-    ],
+    "skill_orb_spawn_times": [],
     "skill_orb_y_offsets": [
       20
     ],
@@ -2011,7 +2003,7 @@
     "time_for_spawn_tracking_missle_sets": [],
     "spawn_tracking_missle_pos_offset_sets": [],
     "set_tracking_missle_speed": 900,
-    "set_tracking_missle_max_speed": 6400,
+    "set_tracking_missle_max_speed": 1200,
     "set_tracking_missle_damage": 20,
     "normal_one_prefab": {
       "__uuid__": "774f2cb2-e236-46db-862b-d85c1c384a00",
@@ -2252,7 +2244,7 @@
     "_string": "点击开始游戏",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 62.05078125,
+    "_actualFontSize": 62.109375,
     "_fontSize": 50,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
@@ -2354,7 +2346,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 303.9961638338055,
+      "width": 303.9546481918239,
       "height": 67
     },
     "_anchorPoint": {
@@ -2482,6 +2474,9 @@
     "_active": true,
     "_components": [
       {
+        "__id__": 78
+      },
+      {
         "__id__": 79
       },
       {
@@ -2523,7 +2518,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "collider",
+    "_name": "atk_collider",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -2537,24 +2532,21 @@
       },
       {
         "__id__": 77
-      },
-      {
-        "__id__": 78
       }
     ],
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -1.5297142092285867,
-      "y": 2.7982781202167644,
+      "x": 0,
+      "y": 0,
       "z": 0
     },
     "_lrot": {
       "__type__": "cc.Quat",
       "x": 0,
       "y": 0,
-      "z": -0.2854709235583036,
-      "w": 0.9583873704315855
+      "z": -0.28282697309163685,
+      "w": 0.9591709458130091
     },
     "_lscale": {
       "__type__": "cc.Vec3",
@@ -2568,9 +2560,9 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": -33.174
+      "z": -32.858
     },
-    "_id": "42zIUU7WdCgK41CwzFuwQc"
+    "_id": "5dMsNfFANCyK/FFEbMHsy/"
   },
   {
     "__type__": "cc.UITransform",
@@ -2584,15 +2576,15 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 69.06,
-      "height": 34.36499999999998
+      "width": 100,
+      "height": 100
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0.5,
       "y": 0.5
     },
-    "_id": "6cqlR0C8dLtJ9kjHxkynqt"
+    "_id": "b99kBgWh1A7o7h+dN+JwEz"
   },
   {
     "__type__": "cc.BoxCollider2D",
@@ -2612,43 +2604,15 @@
     "_restitution": 0,
     "_offset": {
       "__type__": "cc.Vec2",
-      "x": 2.9,
-      "y": -2
+      "x": 0.3,
+      "y": -1.2
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 59.1,
-      "height": 9.4
+      "width": 100,
+      "height": 9.3
     },
-    "_id": "75wu73WstET6z3s0WSW9Fc"
-  },
-  {
-    "__type__": "cc.RigidBody2D",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 75
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "enabledContactListener": true,
-    "bullet": false,
-    "awakeOnLoad": true,
-    "_group": 1,
-    "_type": 0,
-    "_allowSleep": true,
-    "_gravityScale": 1,
-    "_linearDamping": 0,
-    "_angularDamping": 0,
-    "_linearVelocity": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_angularVelocity": 0,
-    "_fixedRotation": false,
-    "_id": "0d2XDY875Km5ycGYA4pFH4"
+    "_id": "17+PnMymBNh54882XiuOid"
   },
   {
     "__type__": "cc.UITransform",
@@ -2662,8 +2626,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 52.936,
-      "height": 36.622
+      "width": 79.404,
+      "height": 54.933
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2724,10 +2688,10 @@
     "player": {
       "__id__": 23
     },
-    "damage": 100,
-    "atk_collider": {
-      "__id__": 77
+    "uiTransform": {
+      "__id__": 78
     },
+    "damage": 100,
     "offsetX": -41,
     "offsetY": 0,
     "offsetZ": 0,
@@ -2738,7 +2702,38 @@
     "floatAmplitude": 10,
     "floatFrequency": 1,
     "floatPhaseOffset": 500,
+    "collider": {
+      "__id__": 77
+    },
     "_id": "44eOjD1FhLQqdA5Df6GlNh"
+  },
+  {
+    "__type__": "cc.RigidBody2D",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 74
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "enabledContactListener": true,
+    "bullet": false,
+    "awakeOnLoad": true,
+    "_group": 1,
+    "_type": 1,
+    "_allowSleep": true,
+    "_gravityScale": 1,
+    "_linearDamping": 0,
+    "_angularDamping": 0,
+    "_linearVelocity": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_angularVelocity": 0,
+    "_fixedRotation": false,
+    "_id": "2dPi4WZK9H86lW1Qtjyj5R"
   },
   {
     "__type__": "cc.Canvas",
