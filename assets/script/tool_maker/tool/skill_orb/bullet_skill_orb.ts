@@ -1,6 +1,6 @@
 // 子弹技能球：拾取后启用自动射击技能
 import { _decorator, Component, Collider2D, CircleCollider2D, Contact2DType,
-     PhysicsSystem2D, IPhysics2DContact,Vec2 } from 'cc';
+     PhysicsSystem2D, IPhysics2DContact,Vec2 ,Animation } from 'cc';
 import { SkillSystem } from '../../../player/skill_system/SkillSystem';
 import { bullet_base } from '../../../bullet/bullet_base';
 
@@ -24,6 +24,9 @@ export class bullet_skill_orb extends bullet_base {
     private xspeed: number = 0; // 水平移动速度
 
     public collider: CircleCollider2D | null = null; // 碰撞体组件
+
+    @property(Animation)
+    private anim: Animation | null = null; // 动画组件
 
     // 初始化碰撞监听
     protected onLoad(): void {

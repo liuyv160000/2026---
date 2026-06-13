@@ -224,30 +224,22 @@ export class Playercontralor extends Component {
     this.Physics2DContact = contact;
     
     // 例如：碰到地面
-    if (other.node.getComponent('plat')) {
+    if (other.node.getComponent('plat_line')) {
         if(this.ifReversing ) return; // 如果是反转状态，碰撞体是触发器，不执行落地逻辑
         if(other.node.name === 'plat_line' )
         {
             this.if_can_reverse = true; 
-            this.on_line = true; // 站在线平台
+            this.on_line = true;
             this.Land();
         }// 站在线平台上时允许反转
         else
         {
             this.if_can_reverse = false; 
-            this.on_line = false; // 不站在线平台
+            this.on_line = false;
         }
         
     }
-    else if(other.node.getComponent(bullet_base) || other.node.parent?.getComponent(dao_ctrl))
-    {
-        this.on_line = this.on_line; // 碰到子弹时保持当前在线状态不变
-        this.if_can_reverse = this.if_can_reverse; // 碰到子弹时保持当前反转能力状态不变
-    }
-    else
-    {
-        this.on_line = false; // 碰到非平台物体，视为不在线
-    }
+
 
     // 如果需要接触点信息（引擎支持时）
     // const wm = contact?.getWorldManifold?.();
@@ -390,7 +382,7 @@ export class Playercontralor extends Component {
     protected quickDown()
     {
         if(this.ifGround) return;
-        this.ySpeed = -this.jumpSpeed*2*this.ifGravityReverse;
+        this.ySpeed = -this.jumpSpeed*3*this.ifGravityReverse;
     }
 
     // 反转重力
@@ -464,6 +456,10 @@ export class Playercontralor extends Component {
     // 更新血条显示
     show_hp_line(){
         this.hp_line.change_hp_line();
+    }
+
+    public change_line_state(state: boolean) {
+        this.on_line = state;
     }
 
 }

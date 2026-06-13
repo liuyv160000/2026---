@@ -1517,7 +1517,7 @@
     "_string": "",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 62.109375,
+    "_actualFontSize": 55.93749999999999,
     "_fontSize": 50,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
@@ -2399,7 +2399,7 @@
     "_string": "点击开始游戏",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 62.109375,
+    "_actualFontSize": 55.93749999999999,
     "_fontSize": 50,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
@@ -2501,8 +2501,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 303.9546481918239,
-      "height": 67
+      "width": 303.9597372555866,
+      "height": 66.99999999999999
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2673,7 +2673,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 640,
-      "y": 360,
+      "y": 360.00000000000006,
       "z": 0
     },
     "_lrot": {
@@ -2898,7 +2898,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1280,
-      "height": 720
+      "height": 720.0000000000001
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

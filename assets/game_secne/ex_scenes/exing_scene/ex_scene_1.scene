@@ -11,7 +11,7 @@
   },
   {
     "__type__": "cc.Scene",
-    "_name": "ex_scene",
+    "_name": "ex_scene_1",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -623,6 +623,7 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "speed": 2400,
     "move_idx": null,
     "loop_time": 0,
     "timer": null,
@@ -1017,6 +1018,7 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "on_line": false,
     "node_to_ignore": null,
     "hp_line": {
       "__id__": 22
@@ -1515,7 +1517,7 @@
     "_string": "",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 60.29296875,
+    "_actualFontSize": 55.93749999999999,
     "_fontSize": 50,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
@@ -1594,9 +1596,11 @@
     "collection_poster": {
       "__id__": 48
     },
+    "scene_enemy_manager_new": null,
     "scene_enemy_manager": {
       "__id__": 59
     },
+    "use_new_enemy_manager": false,
     "musicPlayer": {
       "__id__": 63
     },
@@ -1804,6 +1808,7 @@
       10
     ],
     "skill_orb_pool_size": 3,
+    "skill_orb_flight_speed": 500,
     "announcer": {
       "__id__": 42
     },
@@ -1904,6 +1909,7 @@
       20
     ],
     "skill_orb_pool_size": 3,
+    "skill_orb_flight_speed": 500,
     "announcer": null,
     "_id": "b9Lq8pyaJPj7sPkNUaNouX"
   },
@@ -2032,6 +2038,10 @@
       1,
       1
     ],
+    "set_normal_fly_speed": 400,
+    "set_normal_fly_damage": 20,
+    "set_normal_fly_bullet_speed": 1400,
+    "set_normal_fly_bullet_damage": 10,
     "time_for_spawn_circle_saw_sets": [
       5,
       10,
@@ -2047,6 +2057,8 @@
       61,
       63
     ],
+    "set_circle_saw_speed": 1000,
+    "set_circle_saw_damage": 30,
     "time_for_spawn_laser_sets": [
       7,
       15,
@@ -2073,6 +2085,9 @@
       50,
       -50
     ],
+    "set_laser_damage": 30,
+    "set_laser_atk_time": 0.5,
+    "set_warning_count": 1,
     "time_for_spawn_tracking_missle_sets": [
       8,
       9,
@@ -2169,6 +2184,9 @@
       -130,
       10
     ],
+    "set_tracking_missle_speed": 900,
+    "set_tracking_missle_max_speed": 4800,
+    "set_tracking_missle_damage": 20,
     "normal_one_prefab": {
       "__uuid__": "774f2cb2-e236-46db-862b-d85c1c384a00",
       "__expectedType__": "cc.Prefab"
@@ -2408,7 +2426,7 @@
     "_string": "点击开始游戏",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 60.29296875,
+    "_actualFontSize": 55.93749999999999,
     "_fontSize": 50,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
@@ -2510,8 +2528,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 303.98516966310336,
-      "height": 67
+      "width": 303.9597372555866,
+      "height": 66.99999999999999
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2695,7 +2713,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 640,
-      "y": 360,
+      "y": 360.00000000000006,
       "z": 0
     },
     "_lrot": {
@@ -2920,7 +2938,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1280,
-      "height": 720
+      "height": 720.0000000000001
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

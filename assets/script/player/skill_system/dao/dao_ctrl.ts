@@ -60,12 +60,10 @@ export class dao_ctrl extends Component {
             console.warn('玩家节点未设置！请在编辑器中将玩家节点拖到属性面板的player字段上。');
         }
         this.atk_timer = this.addComponent(Timer);
-        this.atk_timer.set_duration(0.3); // 设置攻击持续时间
+        this.atk_timer.set_duration(0.5); // 设置攻击持续时间
         this.atk_timer.stop(); // 初始状态停止计时
 
-        this.init_physics();
-    
-        PhysicsSystem2D.instance.enable = true;
+      
     
         // this.atk_timer.stop();  计时器停止
         // this.atk_timer.reset(); 计时器重置并开始
@@ -83,9 +81,11 @@ export class dao_ctrl extends Component {
            
 
             if (this.collider) {
-      this.collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
-      this.collider.off(Contact2DType.END_CONTACT, this.onEndContact, this);
+      this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+      this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this);
         }
+
+        this.collider.enabled = true; // 确保碰撞体启用
         
      }
 
@@ -109,6 +109,10 @@ export class dao_ctrl extends Component {
         if (!this.player) {
             console.warn('玩家节点未设置！');
         }
+          this.init_physics();
+    
+        PhysicsSystem2D.instance.enable = true;
+
         
         // 初始化位置在玩家附近
         if (this.player) {
@@ -181,12 +185,14 @@ export class dao_ctrl extends Component {
      */
     private onKeyDown(event: EventKeyboard): void {
         if (event.keyCode === KeyCode.KEY_J) {
+            
             this.start_attack();
         }
     }
 
     public start_attack(): void {
         // 后续在这里添加攻击逻辑
+
             this.is_atking = true;
             this.atk_timer.reset(); // 重置并开始计时
             this.atk_timer.start(); // 启动计时器
@@ -194,10 +200,11 @@ export class dao_ctrl extends Component {
 
     private attack()
     {
-        this.node.position.set(
-            this.player.position.x + this.uiTransform.contentSize.width * 2,
-             this.player.position.y ,
-              this.player.position.z );
+        this.node.setWorldPosition(
+            this.player.worldPosition.x + this.uiTransform.contentSize.width * 10,
+            this.player.worldPosition.y,
+            this.player.worldPosition.z
+        );
     }
 
 
