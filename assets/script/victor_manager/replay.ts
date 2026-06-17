@@ -1,6 +1,7 @@
 // 胜利界面按钮：重新开始关卡
 import { _decorator, Component, Node, Button } from 'cc';
 import { director } from 'cc';
+import { scene_manager } from '../../game_secne/scene_manager/scene_manager';
 const { ccclass, property } = _decorator;
 
 @ccclass('replay')
@@ -19,7 +20,8 @@ export class replay extends Component {
     // 重新加载关卡场景
     onLoadScene() {
         // 切换场景
-        director.loadScene('ex_scene');
+        const lastScene = scene_manager.getInstance().getLastGameScene();
+        director.loadScene(lastScene);
     }
 
     // 组件启动

@@ -1,6 +1,6 @@
 // 激光敌人：预警后攻击，命中玩家造成伤害
 import { _decorator, Component, Node, Vec2, Vec3, RigidBody2D, Collider2D,BoxCollider2D,
-    IPhysics2DContact, Contact2DType, PhysicsSystem2D,Animation
+    IPhysics2DContact, Contact2DType, PhysicsSystem2D,Animation, AudioSource 
  } from 'cc';
 import { enemy_controler_base } from '../../enemy_controler_base';
 import { Timer } from '../../../Timer';
@@ -27,6 +27,9 @@ export class laser extends enemy_controler_base {
     private atk_time: number = 0.5; // 激光持续时间，单位为秒
 
     private anim: Animation = null!; // 动画组件
+
+    @property(AudioSource)
+    private audioSource: AudioSource = null!; // 音频组件
 
 
     // 初始化激光与状态机
@@ -65,12 +68,16 @@ export class laser extends enemy_controler_base {
         }
     }
 
+    @property(AudioSource)
+    private hitSource: AudioSource = null!; // 音频组件
+
     // 碰撞开始：命中玩家造成伤害
     protected onBeginContact(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
         this.Physics2DContact = contact;
     // 例如：碰到玩家
         if (other.node.name === 'player') {
             other.node.getComponent(Playercontralor).get_hurted(this.damage);
+            this.hitSource.play(); // 播放命中音效
         }
 
     } 
@@ -85,7 +92,7 @@ export class laser extends enemy_controler_base {
             this.onLoad(); // 重新加载以应用攻击时间改变
         }
         this.life_timer.start();
-        
+        this.audioSource.play(); // 播放激光发出音效
         this.anim.play('laser_gun');
     }
 

@@ -33,14 +33,17 @@
         "__id__": 8
       },
       {
-        "__id__": 12
+        "__id__": 14
       },
       {
         "__id__": 10
+      },
+      {
+        "__id__": 12
       }
     ],
     "_prefab": {
-      "__id__": 14
+      "__id__": 16
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -85,8 +88,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 54.0735,
-      "height": 47.616
+      "width": 40,
+      "height": 40
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -196,6 +199,9 @@
     "anim": {
       "__id__": 10
     },
+    "pickup_audio": {
+      "__id__": 12
+    },
     "_id": ""
   },
   {
@@ -232,7 +238,7 @@
     "fileId": "cfTsb28gtF17TA0wL4wfPH"
   },
   {
-    "__type__": "cc.CircleCollider2D",
+    "__type__": "cc.AudioSource",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -242,6 +248,31 @@
     "_enabled": true,
     "__prefab": {
       "__id__": 13
+    },
+    "_clip": {
+      "__uuid__": "5a037256-d87c-4e7c-9819-ac9d8c0e4376",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "_loop": false,
+    "_playOnAwake": false,
+    "_volume": 0.1,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "b1qlLmpdNI+YnYnCE5GKGA"
+  },
+  {
+    "__type__": "cc.CircleCollider2D",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 15
     },
     "tag": 0,
     "_group": 1,
@@ -254,7 +285,7 @@
       "x": 0,
       "y": 0
     },
-    "_radius": 27.3,
+    "_radius": 21.3,
     "_id": ""
   },
   {
@@ -270,6 +301,7 @@
       "__id__": 0
     },
     "fileId": "a7Zysr7G9EwbY0Y87Mm4aU",
-    "instance": null
+    "instance": null,
+    "targetOverrides": null
   }
 ]

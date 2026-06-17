@@ -1,5 +1,5 @@
 // 自动射击技能：定时生成玩家子弹
-import { _decorator, Prefab, instantiate, resources, Vec3 } from 'cc';
+import { _decorator, Prefab, instantiate, resources, Vec3, AudioSource } from 'cc';
 import { BaseSkill } from '../BaseSkill';
 import { Playercontralor } from '../../Playercontralor';
 import { SkillSystem } from '../SkillSystem';
@@ -60,15 +60,22 @@ export class BulletAutoSkill extends BaseSkill {
         this.fireBullet();
     }
 
-    // 生成并投放子弹
-    private fireBullet(): void {
-        const bullet = instantiate(this.bulletPrefab);
-        const offsetX = this.player.faceDir * this.player.get_size_x();
-        const offsetY = this.player.get_size_y() / 2;
-        const spawnPos = new Vec3(this.node.position.x + offsetX, this.node.position.y + offsetY, 0);
-        bullet.setPosition(spawnPos);
-        this.node.parent?.addChild(bullet);
-    }
+    @property(AudioSource)
+    private fireSound: AudioSource = null!; // 发射音效组件
 
+    // 生成并投放子弹
+private fireBullet(): void {
+    const bullet = instantiate(this.bulletPrefab);
+    const offsetX = this.player.faceDir * this.player.get_size_x();
+    // 玩家节点位置就是碰撞体中心，子弹中心对准即可
+    const spawnPos = new Vec3(
+        this.node.position.x + offsetX, 
+        this.node.position.y,  // 玩家Y轴中心 = 子弹Y轴中心
+        0
+    );
+    bullet.setPosition(spawnPos);
+    this.fireSound.play(); // 播放发射音效
+    this.node.parent?.addChild(bullet);
+}
    
 }

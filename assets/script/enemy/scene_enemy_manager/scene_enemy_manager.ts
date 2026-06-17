@@ -31,7 +31,9 @@ export class scene_enemy_manager extends Component {
     private set_normal_fly_bullet_speed: number = 1400;
     @property({ type: Number, tooltip: "飞行敌人子弹伤害" })
     private set_normal_fly_bullet_damage: number = 10;
-    
+    @property({type: Number, tooltip: "飞行敌人生命值" })
+    private set_normal_fly_hp: number = 50;
+
     private spawn_index: number = 0; // 当前生成敌人的时间点索引
     
     //电锯敌人的生成时间点设置
@@ -70,7 +72,8 @@ export class scene_enemy_manager extends Component {
     private set_tracking_missle_max_speed: number = 4800;
     @property({ type: Number, tooltip: "跟踪导弹伤害" })
     private set_tracking_missle_damage: number = 20;
-
+    @property({ type: Number, tooltip: "跟踪导弹生命值" })
+    private set_tracking_missle_hp: number = 40;
 
     private spawn_tracking_missle_index: number = 0; // 当前生成跟踪导弹敌人的时间点索引
 
@@ -126,6 +129,7 @@ export class scene_enemy_manager extends Component {
         new_enemy_node.getComponent(normal_one).set_damage(this.set_normal_fly_damage);
         new_enemy_node.getComponent(normal_one).set_bullet_speed(this.set_normal_fly_bullet_speed);
         new_enemy_node.getComponent(normal_one).set_bullet_damage(this.set_normal_fly_bullet_damage);
+        new_enemy_node.getComponent(normal_one).set_hp(this.set_normal_fly_hp);
         
         this.node.parent.addChild(new_enemy_node);
     }
@@ -217,6 +221,7 @@ export class scene_enemy_manager extends Component {
         new_enemy_node.getComponent(tracking_missle).set_speed(this.set_tracking_missle_speed);
         new_enemy_node.getComponent(tracking_missle).set_max_speed(this.set_tracking_missle_max_speed);
         new_enemy_node.getComponent(tracking_missle).set_damage(this.set_tracking_missle_damage);
+        new_enemy_node.getComponent(tracking_missle).set_hp(this.set_tracking_missle_hp);
         this.node.parent.addChild(new_enemy_node);
     }
 

@@ -37,11 +37,22 @@ export class normal_one_fly_maker extends Component {
     // 初始化生成时间表与计时器
     protected onLoad(): void {
         this.timer_for_spawn = this.addComponent(Timer);
-        this.timer_for_spawn.set_duration(this.ex_manager.get_total_time()); // 生成敌人的总时间
+
+        
+
+    
     }
 
     // 组件启动：开始计时
     start() {
+        if(!this.ex_manager) {
+            console.error("normal_one_fly_maker：ex_manager属性未设置！");
+ 
+        }else
+        {
+            this.timer_for_spawn.set_duration(this.ex_manager.get_total_time());
+
+        }
         this.timer_for_spawn.start();
     }
 

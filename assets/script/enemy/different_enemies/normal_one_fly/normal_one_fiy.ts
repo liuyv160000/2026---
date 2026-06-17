@@ -1,7 +1,7 @@
 // 普通飞行敌人：进入、待机、逃跑与死亡状态切换
 import { _decorator, Component, Node, Vec2, Vec3 ,UITransform,
     Sprite, CircleCollider2D, Prefab, instantiate, RigidBody2D,Contact2DType,Collider2D, IPhysics2DContact,
-    tween, AudioSource, AudioClip, PhysicsSystem2D,
+    tween, AudioSource, PhysicsSystem2D,
     BoxCollider2D, Animation } from 'cc';
 import { FSM, IState } from '../../../fms/FMS';
 import { enemy_controler_base } from '../../enemy_controler_base';
@@ -150,6 +150,7 @@ export class normal_one extends enemy_controler_base {
         if(this.enemy_hp <= 0)
         {
             this.annoucer.get_killed_event();
+            this.audioSource.play(); // 播放死亡音效
             if(this.collider)
             {
                 this.collider.enabled = false;
@@ -165,7 +166,11 @@ export class normal_one extends enemy_controler_base {
         this.timer_for_attack.start();
         this.protected_timer.start();
         this.collider.enabled = false; // 初始禁用碰撞体，进入状态结束时启用
-        
+        if(this.if_hp_changed){
+            this.enemy_hp = this.changed_hp;
+        }
+
+
         this.fsm.changeState('on_in');
     }
 
@@ -222,11 +227,12 @@ export class normal_one extends enemy_controler_base {
     @property({type: Prefab})
     prefeb_bullet:Prefab = null; // 子弹预制体
 
+    @property(AudioSource)
     private audioSource: AudioSource = null; // 音频组件
 
-    @property({ type: AudioClip })
-    public atkSound: AudioClip = null; // 攻击音效
 
+    @property(AudioSource)
+    private hit_audio: AudioSource = null; // 命中音效组件
 
     attack(){
         if(this.is_dead)  return;
@@ -240,6 +246,7 @@ export class normal_one extends enemy_controler_base {
             if(this.prefeb_bullet)
             {
                 this.anim.play('atk');
+                this.hit_audio.play(); // 播放攻击音效
                 let bullet = instantiate(this.prefeb_bullet);
                 bullet.getComponent(normal_attack_bullet).set_speed(this.bullet_speed);
                 bullet.getComponent(normal_attack_bullet).set_damage(this.bullet_damage);
@@ -308,6 +315,13 @@ export class normal_one extends enemy_controler_base {
      public set_damage(damage: number) {
         this.changed_damage = damage;
         this.if_damage_changed = true;
+     }
+
+     public if_hp_changed: boolean = false; // 生命值是否已改变过
+     public changed_hp: number = 0; // 已改变的生命值
+     public set_hp(hp: number) {
+        this.changed_hp = hp;
+        this.if_hp_changed = true;
      }
 
     public bullet_speed: number = 1400; // 子弹速度

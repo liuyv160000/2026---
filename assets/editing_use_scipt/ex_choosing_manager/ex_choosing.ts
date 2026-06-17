@@ -10,6 +10,7 @@ export class ex_choosing extends Component {
     private childNodes: Node[] = [];  // 存储子节点的数组
     private arr_n: number = 0; // 子节点数量
     private currentIndex: number = 0; // 当前选择的子节点索引
+    @property([String])
     private scene_names: string[] = []; // 场景名称数组
 
     @property(RichText)
@@ -19,7 +20,6 @@ export class ex_choosing extends Component {
         this.childNodes = this.node.children; // 获取所有子节点
         this.arr_n = this.childNodes.length;
         this.currentIndex = 0; // 初始化当前索引为0
-        this.scene_names = ['ex_scene']; // 场景名称数组
         
         this.initInput(); // 初始化输入系统
     }

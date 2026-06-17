@@ -56,7 +56,6 @@ export class plat_line extends Component {
         // 记录碰撞节点
         this.nodesOnPlatform.add(otherNode);
         
-        console.log(`有物体接触到平台: ${otherNode.name}`);
         
         // 触发自定义逻辑
         this.onEntityEnterPlatform(otherNode);
@@ -71,7 +70,6 @@ export class plat_line extends Component {
         // 从记录中移除
         this.nodesOnPlatform.delete(otherNode);
         
-        console.log(`物体离开平台: ${otherNode.name}`);
         
         // 触发自定义逻辑
         this.onEntityExitPlatform(otherNode);

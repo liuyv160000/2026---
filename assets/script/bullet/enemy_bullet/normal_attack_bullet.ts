@@ -1,6 +1,7 @@
 // 敌方普通子弹：向玩家方向移动并造成伤害
 import { _decorator, Component, Node ,Vec2,Vec3,Collider2D,BoxCollider2D,
-     Contact2DType, PhysicsSystem2D, IPhysics2DContact, RigidBody2D} from 'cc';
+     Contact2DType, PhysicsSystem2D, IPhysics2DContact, RigidBody2D, 
+     AudioSource , Sprite} from 'cc';
 import { Playercontralor } from '../../player/Playercontralor';
 import { bullet_base } from '../bullet_base';
 const { ccclass, property } = _decorator;
@@ -19,6 +20,10 @@ export class normal_attack_bullet extends bullet_base {
     protected collider: Collider2D = null;*/
     protected rigidBody: RigidBody2D = null; // 刚体组件
 
+    @property(AudioSource)
+    private audioSource: AudioSource = null; // 音频组件
+    private Sprite: Sprite = null; // 精灵组件
+
     // 初始化子弹参数与碰撞
     protected onLoad(): void {
         super.onLoad();
@@ -35,6 +40,7 @@ export class normal_attack_bullet extends bullet_base {
             }
         PhysicsSystem2D.instance.enable = true;
         this.timer_for_life.reset();
+        this.Sprite = this.node.getComponent(Sprite)!;
     }
 
     // 初始化物理组件
@@ -54,9 +60,12 @@ export class normal_attack_bullet extends bullet_base {
     // 例如：碰到玩家
         if (other.node.name === 'player') {
             other.node.getComponent(Playercontralor).get_hurted(this.damage);
+            this.audioSource.play(); // 播放命中音效
+            this.Sprite.enabled = false; // 隐藏子弹
+            this.collider.enabled = false; // 禁用碰撞体避免重复触发
             this.scheduleOnce(() => {
                 this.onDestroy();
-            }, 0.05);
+            }, 0.5);
         }
 
     } 

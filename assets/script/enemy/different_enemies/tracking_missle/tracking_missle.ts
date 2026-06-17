@@ -1,7 +1,7 @@
 // 追踪导弹敌人：阶段性锁定并攻击玩家
 import { _decorator, Component, Node, Vec2, Vec3, BoxCollider2D,
      Sprite, CircleCollider2D, Prefab, instantiate, RigidBody2D,Contact2DType,Collider2D, IPhysics2DContact,
-    tween, AudioSource, AudioClip, PhysicsSystem2D,Animation
+    tween, AudioSource, AudioClip, PhysicsSystem2D,Animation ,
  } from 'cc';
 import { FSM, IState } from '../../../fms/FMS';
 import { enemy_controler_base } from '../../enemy_controler_base';
@@ -76,6 +76,8 @@ export class tracking_missle extends enemy_controler_base {
         this.is_onining = true;
         this.move_speed = 400;
         this.move_dir = new Vec2(-1, 0);
+
+        this.sprite = this.node.getComponent(Sprite)!;
      
         PhysicsSystem2D.instance.enable = true;
         this.annoucer = this.node.parent.getChildByName('Camera')!.getChildByName("kill_annoucer")!.getComponent(annoucer)!;
@@ -106,12 +108,17 @@ export class tracking_missle extends enemy_controler_base {
             }
      }
 
+     @property(AudioSource)
+     private hit_audio: AudioSource; // 命中音效组件
+     private sprite: Sprite = null!; // 导弹的Sprite组件
+
      // 碰撞开始：命中玩家造成伤害
      onBeginContact(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null)
      {
           this.Physics2DContact = contact;
            if (other.node.name === 'player') {
             other.node.getComponent(Playercontralor).get_hurted(this.damage);
+            this.hit_audio.play(); // 播放命中音效
             this.collider.enabled = false; // 禁用碰撞体避免重复触发
             this.fsm.changeState("dead");
             this.is_dead = true;
@@ -134,6 +141,9 @@ export class tracking_missle extends enemy_controler_base {
           }
           if(this.if_max_speed_changed){
                this.atk_max_speed = this.changed_max_speed;
+          }
+          if(this.if_hp_changed){
+               this.enemy_hp = this.changed_hp;
           }
 
           this.Resume();
@@ -182,7 +192,7 @@ export class tracking_missle extends enemy_controler_base {
         super.die_check();
         if(this.enemy_hp <= 0)
         {
-            
+            this.hit_audio.play(); // 播放命中音效
             this.annoucer.get_killed_event();
             this.collider.enabled = false;
             this.fsm.changeState('dead');
@@ -262,6 +272,13 @@ export class tracking_missle extends enemy_controler_base {
      public set_damage(damage: number) {
         this.changed_damage = damage;
         this.if_damage_changed = true;
+     }
+
+     private if_hp_changed: boolean = false; // 生命值是否已改变过
+     private changed_hp: number = 0; // 已改变的生命值
+     public set_hp(hp: number) {
+        this.changed_hp = hp;
+        this.if_hp_changed = true;
      }
 
 

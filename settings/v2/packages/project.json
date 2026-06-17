@@ -2,10 +2,30 @@
   "__version__": "1.0.6",
   "physics": {
     "fixedTimeStep": 0.0166667,
-    "collisionGroups": [],
+    "collisionGroups": [
+      {
+        "index": 1,
+        "name": "player"
+      },
+      {
+        "index": 2,
+        "name": "enemy"
+      },
+      {
+        "index": 3,
+        "name": "dao"
+      },
+      {
+        "index": 4,
+        "name": "missle"
+      }
+    ],
     "collisionMatrix": {
-      "0": 3,
-      "1": 3
+      "0": 31,
+      "1": 19,
+      "2": 13,
+      "3": 21,
+      "4": 11
     }
   },
   "custom_joint_texture_layouts": [],
@@ -22,5 +42,8 @@
       "name": "b2",
       "value": 64
     }
-  ]
+  ],
+  "script": {
+    "sortingPlugin": []
+  }
 }

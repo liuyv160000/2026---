@@ -1,6 +1,7 @@
 // 玩家子弹：向前移动并伤害敌人
 import { _decorator, Component, Node ,Vec2,Vec3,Collider2D,BoxCollider2D,CircleCollider2D,
-     Contact2DType, PhysicsSystem2D, IPhysics2DContact, RigidBody2D} from 'cc';
+     Contact2DType, PhysicsSystem2D, IPhysics2DContact, RigidBody2D, UITransform,
+     AudioSource, Sprite } from 'cc';
 import { bullet_base } from '../bullet_base';
 import {enemy_controler_base} from '../../enemy/enemy_controler_base';
 const { ccclass, property } = _decorator;
@@ -24,6 +25,7 @@ export class player_bullet extends bullet_base {
     @property({ tooltip: "子弹飞行角度偏移(度)，0为默认方向" })
     protected angle_offset: number = 0; // 飞行角度偏移
     protected is_cangle: boolean = false; // 是否已改变角度
+    protected UITransform: UITransform = null!; // UITransform组件引用（如果需要调整子弹大小）
 
     // 初始化子弹参数与碰撞
     protected onLoad(): void {
@@ -37,6 +39,9 @@ export class player_bullet extends bullet_base {
         this.collider.enabled = true;               
         PhysicsSystem2D.instance.enable = true;
         this.timer_for_life.reset();
+        this.UITransform = this.node.getComponent(UITransform);
+        this.sprite = this.node.getComponent(Sprite);
+        this.hitSound = this.node.getComponent(AudioSource);
         
         // 根据角度偏移调整移动方向
         if (this.angle_offset !== 0) {
@@ -61,15 +66,26 @@ export class player_bullet extends bullet_base {
                 }
     }
 
+    @property(AudioSource)
+    private hitSound: AudioSource = null!; // 命中音效组件
+    private sprite: Sprite = null!; // 子弹的Sprite组件引用（如果需要调整子弹外观）
+
      // 碰撞开始：命中敌人则造成伤害
      protected onBeginContact(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
             this.Physics2DContact = contact;
         // 例如：碰到敌人
             if (other.node.getComponent(enemy_controler_base)) {
+                if(this.hitSound) {
+                    this.hitSound.play(); // 播放命中音效
+                }else{
+                    console.warn('player_bullet: hitSound component is missing!');
+                }
+                this.collider.enabled = false; // 禁用碰撞体，避免重复触发
+                this.sprite.destroy(); // 隐藏子弹（可以替换为播放爆炸动画）
                 other.node.getComponent(enemy_controler_base).get_hurted(this.damage);
                 this.scheduleOnce(() => {
                     this.onDestroy();
-                }, 0.01);
+                }, 0.1);
             }
     
         } 
@@ -111,4 +127,10 @@ export class player_bullet extends bullet_base {
     update(deltaTime: number) {
         super.update(deltaTime);
     }
+
+    public get_UITransform(): UITransform {
+        return this.UITransform;
+    }
+
+    
 }

@@ -1,6 +1,6 @@
 // 圆锯敌人：直线移动并对玩家造成伤害
 import { _decorator, Component, Node, Vec2, Vec3, RigidBody2D, Collider2D,IPhysics2DContact,
-        Contact2DType, CircleCollider2D, BoxCollider2D,PhysicsSystem2D,
+        Contact2DType, CircleCollider2D, BoxCollider2D,PhysicsSystem2D,AudioSource,
         Animation
  } from 'cc';
 import { enemy_controler_base } from '../../enemy_controler_base';
@@ -27,6 +27,9 @@ export class circle_saw extends enemy_controler_base {
     @property(Animation)
     public anim: Animation = null!; // 动画组件
 
+    @property(AudioSource)
+    private hitSource: AudioSource = null!; // 音频组件
+
     // 初始化物理组件
     initPhysics(): void {
         // 自动获取组件（如果编辑器没绑定）
@@ -44,6 +47,7 @@ export class circle_saw extends enemy_controler_base {
     // 例如：碰到玩家
         if (other.node.name === 'player') {
             other.node.getComponent(Playercontralor).get_hurted(this.damage);
+            this.hitSource.play(); // 播放命中音效
         }
 
     } 

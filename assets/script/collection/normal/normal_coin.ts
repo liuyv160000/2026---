@@ -1,6 +1,6 @@
 // 普通金币：沿固定方向移动，被玩家触碰后销毁
 import { _decorator, Component, Node ,Vec2,Vec3,Collider2D,BoxCollider2D,
-     Contact2DType, PhysicsSystem2D, CircleCollider2D,
+     Contact2DType, PhysicsSystem2D, CircleCollider2D, AudioSource, Sprite, SpriteFrame,
     IPhysics2DContact} from 'cc';
 import { Playercontralor } from '../../player/Playercontralor';
 import { bullet_base } from '../../bullet/bullet_base';
@@ -18,6 +18,7 @@ export class normal_coin extends bullet_base {
      //碰撞检测
         protected Physics2DContact: IPhysics2DContact | null = null;
         protected collider: Collider2D = null;*/
+    private sprite: Sprite = null!; // 用于显示金币的Sprite组件
 
     // 初始化金币参数与碰撞
     protected onLoad(): void {
@@ -33,6 +34,7 @@ export class normal_coin extends bullet_base {
         this.collider.enabled = true;               
         PhysicsSystem2D.instance.enable = true;
         this.timer_for_life.reset();
+        this.sprite = this.getComponent(Sprite); // 获取Sprite组件
     }
 
     // 重新绑定物理事件
@@ -43,16 +45,21 @@ export class normal_coin extends bullet_base {
             }
     }
 
+    @property(AudioSource)
+    private coin_audio: AudioSource;
+
     // 碰撞开始：玩家触碰后销毁
     protected onBeginContact(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
         this.Physics2DContact = contact;
     
     // 例如：碰到玩家
         if (other.node.name === 'player') {
+            this.coin_audio.play(); // 播放音效
+            this.sprite.onDestroy(); // 销毁金币的Sprite组件，视觉上消失
             this.scheduleOnce(() => {
             this.node.active = false; // 先将节点设置为不可见，避免在销毁前继续与玩家发生碰撞
             this.onDestroy(); // 销毁节点
-        }, 0.005 );
+        }, 0.5 );
         }
     
     } 

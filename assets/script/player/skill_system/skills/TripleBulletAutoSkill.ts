@@ -1,5 +1,5 @@
 // 自动射击技能：定时散射三发子弹
-import { _decorator, Prefab, instantiate, resources, Vec3, Vec2 } from 'cc';
+import { _decorator, Prefab, instantiate, resources, Vec3, Vec2, AudioSource } from 'cc';
 import { BaseSkill } from '../BaseSkill';
 import { Playercontralor } from '../../Playercontralor';
 import { SkillSystem } from '../SkillSystem';
@@ -63,21 +63,25 @@ export class TripleBulletAutoSkill extends BaseSkill {
         this.fireBullets();
     }
 
+    @property(AudioSource)
+    private fireSound: AudioSource = null!; // 发射音效组件
+
     // 一次生成三发子弹
-    private fireBullets(): void {
-        const bullet_1 = instantiate(this.bulletPrefab);
-        const bullet_2 = instantiate(this.bulletPrefab);
-        const bullet_3 = instantiate(this.bulletPrefab);
-        const offsetX = this.player.faceDir * this.player.get_size_x();
-        const offsetY = this.player.get_size_y() / 2;
-        const spawnPos = new Vec3(this.node.position.x + offsetX, this.node.position.y + offsetY, 0);
-        bullet_1.setPosition(spawnPos);
-        bullet_2.setPosition(spawnPos);
-        bullet_3.setPosition(spawnPos);
-        bullet_2.getComponent(player_bullet)?.change_angle(-15);  // 左偏转
-        bullet_3.getComponent(player_bullet)?.change_angle(15); // 右偏转
-        this.node.parent?.addChild(bullet_1);
-        this.node.parent?.addChild(bullet_2);
-        this.node.parent?.addChild(bullet_3);
-    }
+private fireBullets(): void {
+    const bullet_1 = instantiate(this.bulletPrefab);
+    const bullet_2 = instantiate(this.bulletPrefab);
+    const bullet_3 = instantiate(this.bulletPrefab);
+    const offsetX = this.player.faceDir * this.player.get_size_x();
+    const spawnPos = new Vec3(this.node.position.x + offsetX, this.node.position.y, 0);
+    bullet_1.setPosition(spawnPos);
+    bullet_2.setPosition(spawnPos);
+    bullet_3.setPosition(spawnPos);
+    bullet_2.getComponent(player_bullet)?.change_angle(-15);  // 左偏转
+    bullet_3.getComponent(player_bullet)?.change_angle(15); // 右偏转
+    this.fireSound.play(); // 播放发射音效
+    this.node.parent?.addChild(bullet_1);
+    this.node.parent?.addChild(bullet_2);
+    this.node.parent?.addChild(bullet_3);
+    
+}
 }

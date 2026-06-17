@@ -18,6 +18,10 @@ export class dao_ctrl extends Component {
 
     private atk_timer: Timer = new Timer(); // 攻击计时器
     private is_atking: boolean = false; // 是否正在攻击
+    @property(Number)
+    private atk_colder: number = 0.5; // 攻击冷却时间
+    private atk_colder_timer: Timer = new Timer(); // 攻击冷却计时器
+    private is_coldering: boolean = false; // 是否正在冷却
 
     @property
     private offsetX: number = 0; // X轴相对距离
@@ -59,9 +63,8 @@ export class dao_ctrl extends Component {
         if (!this.player) {
             console.warn('玩家节点未设置！请在编辑器中将玩家节点拖到属性面板的player字段上。');
         }
-        this.atk_timer = this.addComponent(Timer);
-        this.atk_timer.set_duration(0.5); // 设置攻击持续时间
-        this.atk_timer.stop(); // 初始状态停止计时
+       
+    
 
       
     
@@ -81,8 +84,8 @@ export class dao_ctrl extends Component {
            
 
             if (this.collider) {
-      this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
-      this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this);
+                this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+                this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this);
         }
 
         this.collider.enabled = true; // 确保碰撞体启用
@@ -92,10 +95,8 @@ export class dao_ctrl extends Component {
      onBeginContact(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null)
      {
         this.Physics2DContact = contact;
-        console.log("刀碰撞检测触发");
         if(other.node.getComponent(enemy_controler_base))
         {
-            console.log("刀碰撞到敌人了");
             other.node.getComponent(enemy_controler_base).get_hurted(this.damage);
         }
 
@@ -112,6 +113,13 @@ export class dao_ctrl extends Component {
           this.init_physics();
     
         PhysicsSystem2D.instance.enable = true;
+         this.atk_timer = this.addComponent(Timer);
+        this.atk_timer.set_duration(0.5); // 设置攻击持续时间
+        this.atk_timer.stop(); // 初始状态停止计时
+
+        this.atk_colder_timer = this.addComponent(Timer);
+        this.atk_colder_timer.set_duration(this.atk_colder); // 设置攻击冷却时间
+        this.atk_colder_timer.stop(); // 初始状态停止计时
 
         
         // 初始化位置在玩家附近
@@ -159,13 +167,26 @@ export class dao_ctrl extends Component {
             }
             
         }
+        console.log("目前的冷却情况："+this.is_coldering);
+
+        if(this.is_coldering) {
+           
+            if(this.atk_colder_timer.check_if_end()) {
+                this.is_coldering = false;
+                this.atk_colder_timer.stop();
+                
+            }
+        }
 
         if(this.is_atking){
-            this.attack();
-            if(this.atk_timer.check_if_end()){
+             if(this.atk_timer.check_if_end()){
                 this.is_atking = false;
                 this.atk_timer.stop();
+                
             }
+            
+            this.attack();
+           
         }
 
        
@@ -192,16 +213,26 @@ export class dao_ctrl extends Component {
 
     public start_attack(): void {
         // 后续在这里添加攻击逻辑
+        if(this.is_coldering) {
+            return;
+        }
 
-            this.is_atking = true;
-            this.atk_timer.reset(); // 重置并开始计时
-            this.atk_timer.start(); // 启动计时器
+        this.is_atking = true;
+        this.atk_timer.reset(); // 重置并开始计时
+        this.atk_timer.start(); // 启动计时器
+
+        this.atk_colder_timer.reset(); // 重置并开始计时
+        this.atk_colder_timer.set_using(); // 启动计时器
+        this.is_coldering = true;
+
+            
     }
 
     private attack()
     {
+
         this.node.setWorldPosition(
-            this.player.worldPosition.x + this.uiTransform.contentSize.width * 10,
+            this.player.worldPosition.x + this.uiTransform.contentSize.width * 4,
             this.player.worldPosition.y,
             this.player.worldPosition.z
         );

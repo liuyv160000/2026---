@@ -16,6 +16,7 @@ import { scene_enemy_manager } from '../enemy/scene_enemy_manager/scene_enemy_ma
 import { ex_move_ctrl } from './ex_move_ctrl';
 import { camera_contorler } from '../camera/camera_contorler';
 import { time_showe } from '../../script_for_text/time_showe';
+import { all_ctrler } from '../../script_for_text/all_ctrler';
 const { ccclass, property } = _decorator;
 
 @ccclass('ex_manager')
@@ -47,6 +48,8 @@ export class ex_manager extends Component {
     private background: background_controler = null; // 背景控制
     @property(Node)
     private collection_poster: Node = null; // 道具生成控制
+    @property(all_ctrler)
+    private all_tips_ctrl: all_ctrler = null; // 全局字幕控制
 
     @property(scene_enemy_manager_new)
     private scene_enemy_manager_new: scene_enemy_manager_new = null; // 新的敌人生成控制
@@ -105,18 +108,21 @@ export class ex_manager extends Component {
 
     // 帧更新：检测关卡结束
     update(deltaTime: number) {
-        if(this.timer.check_if_end()){
-            this.timer.stop();
-            // 在这里可以添加游戏结束的逻辑，例如显示游戏结束界面、重置游戏等
-            this.player.getComponent(Playercontralor).ifInvincible = true; // 让玩家无敌，防止继续受到伤害
-            this.player.getComponent(Playercontralor).end_out_completed(); // 调用玩家控制器的结束逻辑
-            this.camera_ctrl.pause_follow(); // 暂停摄像机跟随
-            this.scheduleOnce(() => {
-            this.onLoad_victor_scene(); // 切换到胜利场景
-        }, this.victor_delay);
-            
+    if(this.timer.check_if_end()){
+        this.timer.stop();
+        if (this.player) {
+            const pc = this.player.getComponent(Playercontralor);
+            if (pc) {
+                pc.ifInvincible = true;
+                pc.end_out_completed();
+            }
         }
+        if (this.camera_ctrl) this.camera_ctrl.pause_follow();
+        this.scheduleOnce(() => {
+            this.onLoad_victor_scene();
+        }, this.victor_delay);
     }
+}
 
     // 切换到胜利场景
     onLoad_victor_scene() {
@@ -124,36 +130,43 @@ export class ex_manager extends Component {
     }
 
     // 暂停所有子系统
-    protected all_pause(){
-        this.player.getComponent(Playercontralor).Pause();
-        this.background.Pause();
-        this.collection_poster.active = false; // 禁用道具生成
-        this.musicPlayer.pause_music();
-        if (this.use_new_enemy_manager) {
-            this.scene_enemy_manager_new.Pause();
-        } else {
-            this.scene_enemy_manager.Pause();
-        }
-        this.timer.stop();
-        this.move_ctrl.stop();
-        this.start_tips.pause();
+protected all_pause(){
+    if (this.player) {
+        const pc = this.player.getComponent(Playercontralor);
+        if (pc) pc.Pause();
     }
-
-    // 启动关卡并恢复子系统
-    protected set_up()
-    {
-        this.player.getComponent(Playercontralor).Resume();
-        this.background.Resume();
-        this.collection_poster.active = true; // 启用道具生成
-        this.musicPlayer.resume_music(); // 恢复音乐
-        if (this.use_new_enemy_manager) {
-            this.scene_enemy_manager_new.Resume();
-        } else {
-            this.scene_enemy_manager.Resume();
-        }
-        this.timer.reStart(); // 重新开始计时器
-        this.move_ctrl.resume();
-        this.start_tips.resume();
+    if (this.background) this.background.Pause();
+    if (this.collection_poster) this.collection_poster.active = false;
+    if (this.musicPlayer) this.musicPlayer.pause_music();
+    if (this.use_new_enemy_manager) {
+        if (this.scene_enemy_manager_new) this.scene_enemy_manager_new.Pause();
+    } else {
+        if (this.scene_enemy_manager) this.scene_enemy_manager.Pause();
     }
+    if (this.timer) this.timer.stop();
+    if (this.move_ctrl) this.move_ctrl.stop();
+    if (this.start_tips) this.start_tips.pause();
+    if (this.all_tips_ctrl) this.all_tips_ctrl.pause();
+}
 
+// 启动关卡并恢复子系统
+protected set_up()
+{
+    if (this.player) {
+        const pc = this.player.getComponent(Playercontralor);
+        if (pc) pc.Resume();
+    }
+    if (this.background) this.background.Resume();
+    if (this.collection_poster) this.collection_poster.active = true;
+    if (this.musicPlayer) this.musicPlayer.resume_music();
+    if (this.use_new_enemy_manager) {
+        if (this.scene_enemy_manager_new) this.scene_enemy_manager_new.Resume();
+    } else {
+        if (this.scene_enemy_manager) this.scene_enemy_manager.Resume();
+    }
+    if (this.timer) this.timer.reStart();
+    if (this.move_ctrl) this.move_ctrl.resume();
+    if (this.start_tips) this.start_tips.resume();
+    if (this.all_tips_ctrl) this.all_tips_ctrl.resume();
+}
 }

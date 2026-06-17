@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Vec2, Vec3 ,UITransform,
     Sprite, CircleCollider2D, Prefab, instantiate, RigidBody2D,Contact2DType,Collider2D, IPhysics2DContact,
-    tween, AudioSource, AudioClip, PhysicsSystem2D,
+    tween, AudioSource, AudioClip, PhysicsSystem2D, SpriteFrame,
     BoxCollider2D, Animation } from 'cc';
 import { annoucer } from '../../../../annoucement_system/annoucer';
 import { FSM } from '../../../../fms/FMS';
@@ -17,6 +17,7 @@ export class supply_box extends enemy_controler_base {
     private collider: BoxCollider2D = null!; // 碰撞体组件
     private Physics2DContact: IPhysics2DContact | null = null; // 当前碰撞信息
 
+
     // ========== 移动相关 ==========
     @property({ tooltip: "左右移动速度(像素/秒)" })
     move_speed: number = 100;
@@ -31,6 +32,8 @@ export class supply_box extends enemy_controler_base {
     private initial_y: number = 0;        // 初始Y坐标
     private move_timer: number = 0;       // 移动计时器
     private is_moving: boolean = true;    // 是否正在移动（被攻击后停止）
+
+    private sprite: Sprite = null!; // 用于显示补给箱的Sprite组件
 
     onLoad() {
         this.annoucer = this.node.parent.getChildByName('Camera')!.getChildByName("kill_annoucer")!.getComponent(annoucer)!;
@@ -52,6 +55,8 @@ export class supply_box extends enemy_controler_base {
             this.collider = this.node.getComponent(BoxCollider2D);
         }
     }
+
+    
 
     // 碰撞开始：被玩家子弹命中爆出补给
     protected onBeginContact(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
@@ -92,9 +97,13 @@ export class supply_box extends enemy_controler_base {
         }
     }
 
+    @property(AudioSource)
+    private die_sound: AudioSource = null; // 死亡音效组件
+
     protected die_check() {
         if (this.supply_box_hp <= 0) {
             this.is_moving = false;            // 停止移动
+            this.die_sound.play();                // 播放死亡音效
             this.collider.enabled = false;     // 禁用碰撞体，防止重复触发
             this.annoucer.get_killed_event(); // 播报击杀事件
             this.post_skill_orbit();

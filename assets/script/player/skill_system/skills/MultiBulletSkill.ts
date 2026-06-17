@@ -1,5 +1,5 @@
 // 自动射击技能：定时生成玩家子弹
-import { _decorator, Prefab, instantiate, resources, Vec3 } from 'cc';
+import { _decorator, Prefab, instantiate, resources, Vec3, AudioSource } from 'cc';
 import { BaseSkill } from '../BaseSkill';
 import { Playercontralor } from '../../Playercontralor';
 import { SkillSystem } from '../SkillSystem';
@@ -61,33 +61,34 @@ export class BulletAutoSkill extends BaseSkill {
         this.fireBullet();
     }
 
-    // 生成并投放子弹
-    private fireBullet(): void {
-        const bullet1 = instantiate(this.bulletPrefab);
-        const bullet2 = instantiate(this.bulletPrefab);
-        const bullet3 = instantiate(this.bulletPrefab);
+    @property(AudioSource)
+    private fireSound: AudioSource = null!; // 发射音效组件
 
-        const offsetX = this.player.faceDir * this.player.get_size_x();
-        const offsetY = this.player.get_size_y() / 2;
-        const spawnPos = new Vec3(this.node.position.x + offsetX, this.node.position.y + offsetY, 0);
-        bullet1.setPosition(spawnPos);
-        this.node.parent?.addChild(bullet1);
+   // 生成并投放子弹
+private fireBullet(): void {
+    const bullet1 = instantiate(this.bulletPrefab);
+    const bullet2 = instantiate(this.bulletPrefab);
+    const bullet3 = instantiate(this.bulletPrefab);
 
-        this.scheduleOnce(() => {
-            const offsetX = this.player.faceDir * this.player.get_size_x();
-            const offsetY = this.player.get_size_y() / 2;
-            const spawnPos = new Vec3(this.node.position.x + offsetX, this.node.position.y + offsetY, 0);
-            bullet2.setPosition(spawnPos);
-            this.node.parent?.addChild(bullet2);
-        }, 0.1); // 稍微延迟一下，确保子弹生成后再设置位置（如果需要的话）
+    const offsetX = this.player.faceDir * this.player.get_size_x();
+    const spawnPos = new Vec3(this.node.position.x + offsetX, this.node.position.y, 0);
+    
+    this.fireSound.play(); // 播放发射音效
 
-        this.scheduleOnce(() => {
-            const offsetX = this.player.faceDir * this.player.get_size_x();
-            const offsetY = this.player.get_size_y() / 2;
-            const spawnPos = new Vec3(this.node.position.x + offsetX, this.node.position.y + offsetY, 0);
-            bullet3.setPosition(spawnPos);
-            this.node.parent?.addChild(bullet3);
-        }, 0.2); // 稍微延迟一下，确保子弹生成后再设置位置（如果需要的话）
-            
-    }
+    
+    bullet1.setPosition(spawnPos);
+    this.node.parent?.addChild(bullet1);
+
+    this.scheduleOnce(() => {
+        bullet2.setPosition(spawnPos);
+        this.fireSound.play(); // 播放发射音效
+        this.node.parent?.addChild(bullet2);
+    }, 0.1);
+
+    this.scheduleOnce(() => {
+        bullet3.setPosition(spawnPos);
+        this.fireSound.play(); // 播放发射音效
+        this.node.parent?.addChild(bullet3);
+    }, 0.2);
+}
 }

@@ -1,5 +1,5 @@
 // 警告区域：根据剩余时间逐步变透明
-import { _decorator, Component, Sprite, UIOpacity } from 'cc';
+import { _decorator, Component, Sprite, UIOpacity , AudioSource} from 'cc';
 import { Timer } from 'db://assets/script/Timer';
 const { ccclass, property } = _decorator;
 
@@ -12,6 +12,9 @@ export class box_warning_zone extends Component {
     @property(Sprite)
     private mask: Sprite = null; // 警告区域的Sprite组件
 
+    @property(AudioSource)
+    private warning_sound: AudioSource = null; // 警告音效组件
+
 
     // 初始化透明度组件
     onLoad(): void {
@@ -21,6 +24,10 @@ export class box_warning_zone extends Component {
 
     // 组件启动
     start() {
+        this.warning_sound.play(); // 播放警告音效
+        this.scheduleOnce(() => {
+            this.warning_sound.stop(); // 停止警告音效
+        }, this.warning_duration - 0.1); // 在警告结束前0.1秒停止音效，避免音效过长
         if(this.if_warning_duration_changed){
             this.warning_duration = this.changed_warning_duration;
             this.initial_warning_duration = this.changed_warning_duration;

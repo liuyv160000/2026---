@@ -20,7 +20,7 @@ import {
     tween,
     UITransform,
     Camera,
-    view
+    view,  AudioSource
 } from 'cc';
 import {  PhysicsSystem2D, ERaycast2DType, Graphics } from 'cc';
 import { FSM , IState} from '../fms/FMS';
@@ -294,6 +294,7 @@ export class Playercontralor extends Component {
         this.initInput();
         this.initFSM(); 
         this.initPhysics();
+        this.slow_rate = 1; // 确保初始状态下没有减速
         this.transform = this.node.getComponent(UITransform);
         this.anim = this.node.getComponent(Animation);
         this.skillSystem = this.skillSystem ?? this.node.getComponent(SkillSystem);
@@ -309,6 +310,8 @@ export class Playercontralor extends Component {
         this.invincibleTimer.stop(); // 初始状态下无敌计时器不工作
 
         PhysicsSystem2D.instance.enable = true;
+
+        this.debuff_timer = this.node.addComponent(Timer);
     }
 
     // 组件启动
@@ -323,6 +326,7 @@ export class Playercontralor extends Component {
     // 帧更新：状态机、重力与技能
     update(deltaTime: number) {
     if(this.is_paused) return;    
+    this.check_debuff();
     this.check_dead();
     if (this.fsm) {
         this.fsm.update(deltaTime);
@@ -337,19 +341,27 @@ export class Playercontralor extends Component {
     }
 }
 
+    @property(AudioSource)
+    private jump_audio: AudioSource;
+
     // 跳跃逻辑
     protected Jump()
     {
         if(this.ifAir || this.ifReversing) return;
         //切换到跳跃状态
+        this.jump_audio?.play(); // 播放跳跃音效
         this.node.setPosition(this.node.position.x + 1, this.node.position.y);
         this.fsm.changeState('jump');
     }
+
+    @property(AudioSource)
+    private land_audio: AudioSource;
 
     // 落地逻辑
     protected Land()
     {
         if(this.ifGround) return;
+        this.land_audio?.play(); // 播放落地音效
         this.ifGround = true;
         this.ifAir = false;
         this.fsm.changeState('idle');
@@ -360,7 +372,7 @@ export class Playercontralor extends Component {
     {
         if(!this.ifReversing)
         {
-            this.ySpeed -= this.Gravity * this.ifGravityReverse * deltatime;
+            this.ySpeed -= this.Gravity * this.ifGravityReverse * deltatime * this.slow_rate;
             this.xSpeed = this.xSpeed; // 水平速度逐渐增加，模拟加速效果
             this.xSpeed += this.x_a; // 水平加速度影响水平速度
         }
@@ -382,7 +394,7 @@ export class Playercontralor extends Component {
     protected quickDown()
     {
         if(this.ifGround) return;
-        this.ySpeed = -this.jumpSpeed*3*this.ifGravityReverse;
+        this.ySpeed = -this.jumpSpeed*3*this.ifGravityReverse*this.slow_rate; // 快速下落速度
     }
 
     // 反转重力
@@ -460,6 +472,28 @@ export class Playercontralor extends Component {
 
     public change_line_state(state: boolean) {
         this.on_line = state;
+    }
+
+    private debuff_timer: Timer = null; // Debuff计时器
+    private debuff_duration: number = 0; // Debuff持续时间
+    private slow_rate: number = 1; // 减速倍率，0.5表示减半
+
+    public apply_searchlight_debuff(debuffDuration: number, slowRate: number = 0.5) {
+        this.debuff_duration = debuffDuration;
+        this.slow_rate = slowRate;
+        this.rigidBody.linearDamping = 500; // 增加线性阻尼，模拟减速效果
+        this.debuff_timer.set_duration(this.debuff_duration);
+        this.debuff_timer?.reset();
+        this.debuff_timer?.start();
+        
+    }
+
+    private check_debuff() {
+        if(this.debuff_timer?.check_if_end()) {
+            this.rigidBody.linearDamping = 0; // 恢复正常阻尼
+            this.slow_rate = 1; // 恢复正常速度
+            this.debuff_timer?.stop();
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 // 三发散射技能球：拾取后启用三发散射射击技能
 import { _decorator, Component, Collider2D, CircleCollider2D, Contact2DType,
-     PhysicsSystem2D, IPhysics2DContact, Vec2 } from 'cc';
+     PhysicsSystem2D, IPhysics2DContact, Vec2, Animation , AudioSource, Sprite } from 'cc';
 import { SkillSystem } from '../../../player/skill_system/SkillSystem';
 import { bullet_base } from '../../../bullet/bullet_base';
 
@@ -13,6 +13,12 @@ export class triple_bullet_skill_orb extends bullet_base {
     private skill_id: string = 'bullet_triple'; // 技能ID
 
     public collider: CircleCollider2D | null = null; // 碰撞体组件
+    
+    public animation: Animation | null = null; // 动画组件
+
+    @property(AudioSource)
+    private pickup_audio: AudioSource; // 拾取音效组件
+    private sprite: Sprite = null!; // 用于显示技能球的Sprite组件
 
     // 初始化碰撞监听
     protected onLoad(): void {
@@ -25,6 +31,7 @@ export class triple_bullet_skill_orb extends bullet_base {
             this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this);
             this.collider.enabled = true;
         }
+        this.sprite = this.getComponent(Sprite); // 获取Sprite组件
         PhysicsSystem2D.instance.enable = true;
     }
 
@@ -40,10 +47,13 @@ export class triple_bullet_skill_orb extends bullet_base {
     protected onBeginContact(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
         const skillSystem = other.node.getComponent(SkillSystem);
         if (!skillSystem) return;
+        this.pickup_audio.play(); // 播放拾取音效
+        this.sprite.onDestroy(); // 销毁技能球的Sprite组件，视觉上消失
+        this.collider.enabled = false; // 禁用碰撞体，避免重复触发
         skillSystem.enableSkill(this.skill_id);
         this.scheduleOnce(() => {
             this.node.destroy();
-        }, 0.01);
+        }, 0.5);
     }
 
     // 碰撞结束占位
